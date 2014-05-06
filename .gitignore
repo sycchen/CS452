@@ -1,6 +1,6 @@
-# Object files
+# Ignore Headers
 *.o
 *.elf
-
-# Libraries
 *.a
+*.s
+*.map
