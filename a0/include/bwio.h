@@ -1,39 +1,44 @@
-/*
- * bwio.h
- */
+#ifndef BWIO_H
+#define BWIO_H
 
-typedef char *va_list;
+    /*
+     * bwio.h
+     */
 
-#define __va_argsiz(t)	\
-		(((sizeof(t) + sizeof(int) - 1) / sizeof(int)) * sizeof(int))
+    typedef char *va_list;
 
-#define va_start(ap, pN) ((ap) = ((va_list) __builtin_next_arg(pN)))
+    #define __va_argsiz(t)	\
+    		(((sizeof(t) + sizeof(int) - 1) / sizeof(int)) * sizeof(int))
 
-#define va_end(ap)	((void)0)
+    #define va_start(ap, pN) ((ap) = ((va_list) __builtin_next_arg(pN)))
 
-#define va_arg(ap, t)	\
-		 (((ap) = (ap) + __va_argsiz(t)), *((t*) (void*) ((ap) - __va_argsiz(t))))
+    #define va_end(ap)	((void)0)
 
-#define COM1	0
-#define COM2	1
+    #define va_arg(ap, t)	\
+    		 (((ap) = (ap) + __va_argsiz(t)), *((t*) (void*) ((ap) - __va_argsiz(t))))
 
-#define ON	1
-#define	OFF	0
+    #define COM1	0
+    #define COM2	1
 
-int bwsetfifo( int channel, int state );
+    #define ON	1
+    #define	OFF	0
 
-int bwsetspeed( int channel, int speed );
+    int bwsetfifo( int channel, int state );
 
-int bwputc( int channel, char c );
+    int bwsetspeed( int channel, int speed );
 
-int bwgetc( int channel );
+    int bwputc( int channel, char c );
 
-int bwputx( int channel, char c );
+    int bwgetc( int channel );
 
-int bwputstr( int channel, char *str );
+    int bwputx( int channel, char c );
 
-int bwputr( int channel, unsigned int reg );
+    int bwputstr( int channel, char *str );
 
-void bwputw( int channel, int n, char fc, char *bf );
+    int bwputr( int channel, unsigned int reg );
 
-void bwprintf( int channel, char *format, ... );
+    void bwputw( int channel, int n, char fc, char *bf );
+
+    void bwprintf( int channel, char *format, ... );
+
+#endif
