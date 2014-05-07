@@ -44,25 +44,28 @@ int main( int argc, const char* argv[] ) {
 		int minutes = ((elapsed_time % 360000) - milliseconds - seconds)/60000; 
 		int hours = (elapsed_time - milliseconds - seconds - minutes)/3600000;
 		
+		char[] padding_milliseconds = "";
 		if (milliseconds < 10) {
-		
+			padding_milliseconds = "000";
 		} else if (milliseconds < 100) {
-
+			padding_milliseconds = "00";
 		} else if (milliseconds < 1000) {
-
+			padding_milliseconds = "0";
 		}
+		char[] padding_seconds = "";
 		if (second < 10) {
-
+			padding_seconds = "0";
 		}
+		char[] padding_minutes = "";
 		if (minutes < 10) {
-		
+			padding_minutes = "0";
 		}
+		char[] padding_hours = "";
 		if (hours < 10) {
-		
+			padding_hours = "0";
 		}
 
-
-bwprintf( COM2, "Time: %d:%d:%d:%d\n", hours, minutes, seconds, milliseconds);
+		bwprintf( COM2, "Time: %s%d:%s%d:%s%d:%s%d\n", padding_hours, hours, padding_minutes, minutes, padding_seconds, seconds, padding_milliseconds, milliseconds);
 
 		/* Check Buffer */
 
