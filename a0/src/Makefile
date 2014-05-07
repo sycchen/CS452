@@ -17,7 +17,7 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 ARFLAGS = rcs
 
-all:  bwio.a clock.a
+all:  libbwio.a libclock.a
 
 bwio.s: bwio.c 
 	$(XCC) -S $(CFLAGS) bwio.c
@@ -27,6 +27,7 @@ bwio.o: bwio.s
 
 libbwio.a: bwio.o
 	$(AR) $(ARFLAGS) $@ bwio.o
+	mv $@ ../lib/.
 
 clock.s: clock.c 
 	$(XCC) -S $(CFLAGS) clock.c
@@ -36,6 +37,7 @@ clock.o: clock.s
 
 libclock.a: clock.o
 	$(AR) $(ARFLAGS) $@ clock.o
+	mv $@ ../lib/.
 
 clean:
 	-rm -f *.s *.a *.o
