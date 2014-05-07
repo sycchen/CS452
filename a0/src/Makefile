@@ -25,7 +25,7 @@ bwio.s: bwio.c
 bwio.o: bwio.s
 	$(AS) $(ASFLAGS) -o bwio.o bwio.s
 
-bwio.a: bwio.o
+libbwio.a: bwio.o
 	$(AR) $(ARFLAGS) $@ bwio.o
 
 clock.s: clock.c 
@@ -34,7 +34,7 @@ clock.s: clock.c
 clock.o: clock.s
 	$(AS) $(ASFLAGS) -o clock.o clock.s
 
-clock.a: clock.o
+libclock.a: clock.o
 	$(AR) $(ARFLAGS) $@ clock.o
 
 clean:

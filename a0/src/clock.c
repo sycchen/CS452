@@ -16,7 +16,7 @@ void timer_init() {
  * Reads from the Timer
  */
 time_t timer_getTime() {
-    return (time_t)TIMER_CLICKS_IN_DAY - (time_t)(*((int *)( TIMER3_BASE + VAL_OFFSET )))/2;
+    return (((time_t)TIMER_CLICKS_IN_DAY - (time_t)(*((int *)( TIMER3_BASE + VAL_OFFSET ))))/2);
 }
 
 /*

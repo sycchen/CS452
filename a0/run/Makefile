@@ -25,7 +25,7 @@ main.o: main.s
 	$(AS) $(ASFLAGS) -o main.o main.s
 
 main.elf: main.o
-	$(LD) $(LDFLAGS) -o $@ main.o -lbwio -lgcc
+	$(LD) $(LDFLAGS) -o $@ main.o -lbwio -lclock -lgcc
 
 clean:
 	-rm -f main.elf *.s *.o main.map
