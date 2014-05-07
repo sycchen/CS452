@@ -2,7 +2,7 @@
 #include <types.h>
 #include <bwio.h>
 
-#define TIMER_CLICKS_IN_DAY = 172800000 - 1;
+#define TIMER_CLICKS_IN_DAY 172799999
 
 /* 
  * Circular Buffer
@@ -36,14 +36,33 @@ int main( int argc, const char* argv[] ) {
 	/* Run instruction */
 	while (1) {
 		/* Check Timer */
-		elapsed_time = (time_t)(TIMER_CLICKS_IN_DAY - (int)(*timer_read))/2;
+		elapsed_time = (TIMER_CLICKS_IN_DAY - (int)(*timer_read))/2;
 
 		/* Test - Print Time */
-		int milliseconds = (elapsed_time % 86400);
-		int seconds = ((elapsed_time % 1440) - milliseconds)/1000;
-		int minutes = ((elapsed_time % 24) - milliseconds - seconds)/60000; 
+		int milliseconds = (elapsed_time % 1000);
+		int seconds = ((elapsed_time % 60000) - milliseconds)/1000;
+		int minutes = ((elapsed_time % 360000) - milliseconds - seconds)/60000; 
 		int hours = (elapsed_time - milliseconds - seconds - minutes)/3600000;
-		bwprintf( COM2, "Time: %02d:%02d:%02d:%04d", hours, minutes, seconds, milliseconds );
+		
+		if (milliseconds < 10) {
+		
+		} else if (milliseconds < 100) {
+
+		} else if (milliseconds < 1000) {
+
+		}
+		if (second < 10) {
+
+		}
+		if (minutes < 10) {
+		
+		}
+		if (hours < 10) {
+		
+		}
+
+
+bwprintf( COM2, "Time: %d:%d:%d:%d\n", hours, minutes, seconds, milliseconds);
 
 		/* Check Buffer */
 

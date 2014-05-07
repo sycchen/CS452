@@ -18,7 +18,7 @@ LDFLAGS = -init main -Map main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/
 
 all:  main.s main.elf
 
-main.s: main.c
+main.s: main.c main.h
 	$(XCC) -S $(CFLAGS) main.c
 
 main.o: main.s
