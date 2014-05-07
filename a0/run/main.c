@@ -25,18 +25,18 @@ int main( int argc, const char* argv[] ) {
 	bwsetfifo( COM2, OFF );
 
 	/* Initialize Timer 1 */
-	int *timer_ctrl = (int *)( TIMER3_BASE  + CTRL_OFFSET );
+	int *timer_ctrl = (int *)( TIMER3_BASE + CTRL_OFFSET );
 	int *timer_load = (int *)( TIMER3_BASE + LDR_OFFSET );
 	int *timer_read = (int *)( TIMER3_BASE + VAL_OFFSET );
-	*timer_ctrl = 0x00000000;		/* Resets Timer */
-	*timer_load = (*timer_load | TIMER_CLICKS_IN_DAY);  	/* Load timer with an hour */
-	*timer_ctrl = (*timer_ctrl | (ENABLE_MASK + MODE_MASK)); /* Start Timer */
+	*timer_ctrl = 0x00000000;				/* Resets Timer */
+	*timer_load |= TIMER_CLICKS_IN_DAY;  	/* Load timer with an hour */
+	*timer_ctrl |= ENABLE_MASK + MODE_MASK; /* Start Timer */
 
 
 	/* Run instruction */
 	while (1) {
 		/* Check Timer */
-		elapsed_time = (TIMER_CLICKS_IN_DAY - (int)(*timer_read))/2;
+		elapsed_time = (time_t)(TIMER_CLICKS_IN_DAY - (int)(*timer_read))/2;
 
 		/* Test - Print Time */
 		int milliseconds = (elapsed_time % 86400);
