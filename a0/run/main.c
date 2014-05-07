@@ -33,6 +33,7 @@ int main( int argc, const char* argv[] ) {
 	*timer_ctrl |= ENABLE_MASK + MODE_MASK; /* Start Timer */
 
 
+	bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
 	/* Run instruction */
 	while (1) {
 		/* Check Timer */
@@ -46,10 +47,8 @@ int main( int argc, const char* argv[] ) {
 		
 		char *padding_milliseconds = "";
 		if (milliseconds < 10) {
-			padding_milliseconds = "000";
-		} else if (milliseconds < 100) {
 			padding_milliseconds = "00";
-		} else if (milliseconds < 1000) {
+		} else if (milliseconds < 100) {
 			padding_milliseconds = "0";
 		}
 		char *padding_seconds = "";
@@ -65,7 +64,9 @@ int main( int argc, const char* argv[] ) {
 			padding_hours = "0";
 		}
 
-		bwprintf( COM2, "Time: %s%d:%s%d:%s%d:%s%d\n", padding_hours, hours, padding_minutes, minutes, padding_seconds, seconds, padding_milliseconds, milliseconds);
+		bwprintf( COM2, "\x1b[H");
+		bwprintf( COM2, "Time: %s%d:%s%d:%s%d:%s%d", 
+			padding_hours, hours, padding_minutes, minutes, padding_seconds, seconds, padding_milliseconds, milliseconds);
 
 		/* Check Buffer */
 
