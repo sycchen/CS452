@@ -85,3 +85,4 @@
     #define UART_HDLCSTS_OFFSET	0x21c
 
 #endif
+

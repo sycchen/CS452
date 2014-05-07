@@ -1,7 +1,7 @@
 #include <ts7200.h>
 #include <types.h>
-#include <bwio.h>
 #include <clock.h>
+#include <bwio.h>
 
 // /*
 //  * Circular Buffer

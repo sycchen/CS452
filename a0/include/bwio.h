@@ -42,3 +42,4 @@
     void bwprintf( int channel, char *format, ... );
 
 #endif
+

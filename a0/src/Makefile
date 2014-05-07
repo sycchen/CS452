@@ -28,13 +28,13 @@ bwio.o: bwio.s
 bwio.a: bwio.o
 	$(AR) $(ARFLAGS) $@ bwio.o
 
-bwio.s: clock.c 
+clock.s: clock.c 
 	$(XCC) -S $(CFLAGS) clock.c
 
-bwio.o: clock.s
+clock.o: clock.s
 	$(AS) $(ASFLAGS) -o clock.o clock.s
 
-bwio.a: clock.o
+clock.a: clock.o
 	$(AR) $(ARFLAGS) $@ clock.o
 
 clean:
