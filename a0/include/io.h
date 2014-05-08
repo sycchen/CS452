@@ -12,7 +12,8 @@ int io_setspeed( int channel, int speed );
 /*
  * Input
  */
-int io_getc( int channel );
+int io_canGet( int channel );
+char io_getc( int channel );
 
 #endif
 
