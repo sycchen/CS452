@@ -1,6 +1,7 @@
 #include <ts7200.h>
 #include <types.h>
 #include <bwio.h>
+#include <io.h>
 #include <clock.h>
 
 /*
@@ -20,16 +21,22 @@ int main( int argc, const char* argv[] ) {
     /* Run instructions (Polling Loop) */
     while (1) {
         /* Check Timer */
-//        elapsed_time = timer_getTime();
+        elapsed_time = timer_getTime();
 
         /* Print Time */
-//        bwprintf( COM2, "\x1b[?35l\x1b[H");
-//        timer_printTime(elapsed_time);
-//        bwprintf( COM2, "\x1b[?25h");
-        int data = bwgetc( COM2 );
+    //    bwprintf( COM2, "\x1b[?35l\x1b[H");
+    //    timer_printTime(elapsed_time);
+    //    bwprintf( COM2, "\x1b[?25h");
+
+        int data = io_getc( COM2 );
         if ((char)data == 'q') {
-		break;
-	}
+            break;
+        } else {
+    bwprintf( COM2, "\x1b[?35l\x1b[H");
+    timer_printTime(elapsed_time);
+    bwprintf( COM2, "\x1b[?25h");
+
+        }
 
         /* Check Buffer */
 
