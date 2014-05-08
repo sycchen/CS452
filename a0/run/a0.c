@@ -18,7 +18,7 @@ int main( int argc, const char* argv[] ) {
 //    bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
 
     /* Run instructions (Polling Loop) */
-//    while (1) {
+    while (1) {
         /* Check Timer */
 //        elapsed_time = timer_getTime();
 
@@ -27,11 +27,13 @@ int main( int argc, const char* argv[] ) {
 //        timer_printTime(elapsed_time);
 //        bwprintf( COM2, "\x1b[?25h");
         int data = bwgetc( COM2 );
-        bwputc( COM2, (char)data );
+        if ((char)data == 'q') {
+		break;
+	}
 
         /* Check Buffer */
 
-//    }
+    }
 
     return 0;
 }
