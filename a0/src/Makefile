@@ -49,5 +49,25 @@ libio.a: io.o
 	$(AR) $(ARFLAGS) $@ io.o
 	mv $@ ../lib/.
 
+iparser.s: iparser.c 
+	$(XCC) -S $(CFLAGS) iparser.c
+
+iparser.o: iparser.s
+	$(AS) $(ASFLAGS) -o iparser.o iparser.s
+
+libiparser.a: iparser.o
+	$(AR) $(ARFLAGS) $@ iparser.o
+	mv $@ ../lib/.
+
+controller.s: controller.c 
+	$(XCC) -S $(CFLAGS) controller.c
+
+controller.o: controller.s
+	$(AS) $(ASFLAGS) -o controller.o controller.s
+
+libcontroller.a: controller.o
+	$(AR) $(ARFLAGS) $@ controller.o
+	mv $@ ../lib/.
+
 clean:
 	-rm -f *.s *.a *.o

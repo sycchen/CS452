@@ -3,6 +3,8 @@
 #include <bwio.h>
 #include <io.h>
 #include <clock.h>
+#include <iparser.h>
+#include <controller.h>
 
 /*
  * Polling Loop
@@ -10,6 +12,8 @@
 int main( int argc, const char* argv[] ) {
     /* Initialize IO variables */
     char data_read;
+    struct state cur_state = NULL;
+
 
     /* Initialize Time and Timer */
     time_t elapsed_time = 0;
@@ -24,7 +28,7 @@ int main( int argc, const char* argv[] ) {
 //    bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
 
     /* Run instructions (Polling Loop) */
-    while (1) {
+    while (system_status(0)) {
         /* Check Timer */
         elapsed_time = timer_getTime();
 
@@ -38,15 +42,8 @@ int main( int argc, const char* argv[] ) {
 //            data_read = io_getc( COM2 );
 	    data_read = 0;
 	    data_read = (char)bwgetc( COM2 );
-            if (data_read == 'q') {
-                break;
-            } else if (data_read == 'g') {
-		bwputc( COM1, (char)0x60);
-		bwputc( COM2, (char)0x60);
-	    } else if (data_read == 's') {
-		bwputc( COM1, (char)0x61);
-		bwputc( COM2, (char)0x61);
-	    }
+        runState(data_read, cur_state);
+
 //        }
     }
 
