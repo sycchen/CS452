@@ -14,14 +14,14 @@
 /* State */
 struct state {
     /* Function to use to get to next struct */
-    int (*func)(char);
+    int fnid;
 
     /* Pointer to the last state for backspacing */
     struct state *last_state;   
 };
 
-void runState(char in, struct state *curState);
-int *intialState(char in);
+struct state runState(char in, struct state *curState);
+int initialState(char in);
 int failState(char in);
 int state1(char in);
 int state2(char in);

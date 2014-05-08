@@ -1,3 +1,6 @@
+#include <bwio.h>
+#include <controller.h>
+
 /* Tells the train system to turn on */
 void system_on() {
     bwputc( COM2, (char)0x60);
@@ -17,9 +20,10 @@ void system_quit() {
 int system_status(int command) {
     static int status = 1;
 
-    if (status == 0) {
-        return status;
-    } else {
-        status == 0;        
+    if (status == 1) {
+        status = 0;        
     }
+
+    return status;
 }
+
