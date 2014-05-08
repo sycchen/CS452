@@ -14,18 +14,18 @@ CFLAGS  = -c -fPIC -Wall -I. -I../include -mcpu=arm920t -msoft-float
 ASFLAGS	= -mcpu=arm920t -mapcs-32
 # -mapcs: always generate a complete stack frame
 
-LDFLAGS = -init main -Map main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2 -L../lib
+LDFLAGS = -init a0 -Map a0.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2 -L../lib
 
-all:  main.s main.elf
+all:  a0.s a0.elf
 
-main.s: main.c main.h
-	$(XCC) -S $(CFLAGS) main.c
+a0.s: a0.c a0.h
+	$(XCC) -S $(CFLAGS) a0.c
 
-main.o: main.s
-	$(AS) $(ASFLAGS) -o main.o main.s
+a0.o: a0.s
+	$(AS) $(ASFLAGS) -o a0.o a0.s
 
-main.elf: main.o
-	$(LD) $(LDFLAGS) -o $@ main.o -lbwio -lclock -lgcc
+a0.elf: a0.o
+	$(LD) $(LDFLAGS) -o $@ a0.o -lbwio -lclock -lgcc
 
 clean:
-	-rm -f main.elf *.s *.o main.map
+	-rm -f a0.elf *.s *.o a0.map
