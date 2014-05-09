@@ -5,6 +5,8 @@ void system_on();
 void system_off();
 void system_quit();
 int system_status();
+void train_speed();
+void switch_direction();
 
 #endif
 

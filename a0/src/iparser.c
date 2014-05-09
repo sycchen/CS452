@@ -9,31 +9,24 @@ state runState(char in, state curState) {
 
     switch(curState) {
         case 0:
-        bwputc( COM2, '0' );
             new_state = initialState(in);
             break;
         case 1:
-        bwputc( COM2, '1' );
             new_state = state1(in);
             break;
         case 2:
-        bwputc( COM2, '2' );
             new_state = state2(in);
             break;
         case 3:
-        bwputc( COM2, '3' );
             new_state = state3(in);
             break;
         case 4:
-        bwputc( COM2, '4' );
             new_state = state4(in);
             break;
         case 5:
-        bwputc( COM2, '5' );
             new_state = state5(in);
             break;
         default:
-        bwputc( COM2, '-' );
             new_state = -1;
             break;
     }
@@ -57,13 +50,11 @@ int initialState(char in) {
 
 /* State where it can't lead to another command */
 int failState(char in) {
-    bwputc( COM2, '-' );
     return -1;
 }
 
 /* O */
 int state1(char in) {
-    bwputc( COM2, 'o' );
     switch( in ) {
         case 'n':
             return 2;
@@ -76,12 +67,11 @@ int state1(char in) {
 
 /* ON */
 int state2(char in) {
-    bwputc( COM2, 'n' );
     switch( in ) {
         case ' ':
             return 2;
         case '\r':
-            train_speed();
+            switch_direction();
             return 0;
         default:
             return -1;
@@ -90,7 +80,6 @@ int state2(char in) {
 
 /* OF */
 int state3(char in) {
-    bwputc( COM2, 'f' );
     switch( in ) {
         case 'f':
             return 4;
@@ -101,7 +90,6 @@ int state3(char in) {
 
 /* OFF */
 int state4(char in) {
-    bwputc( COM2, 'f' );
     switch( in ) {
         case ' ':
             return 4;
@@ -115,7 +103,6 @@ int state4(char in) {
 
 /* Q */
 int state5(char in) {
-    bwputc( COM2, 'q' );
     switch( in ) {
         case ' ':
             return 5;
