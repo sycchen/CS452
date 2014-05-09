@@ -1,13 +1,7 @@
 #include <bwio.h>
+#include <io.h>
 #include <parser.h>
 #include <controller.h>
-
-/*  */
-static int a2d(char ch) {
-    if (ch >= '0' && ch <= '9') return (ch - '0');
-
-    return -1;
-}
 
 /* Fail state */
 static int failState(char in) {
@@ -141,7 +135,7 @@ static int state8(char in, int *arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = a2d( in );
+            *arg1 = bwa2d( in );
             return 9;
         default:
             return -1;
@@ -163,7 +157,7 @@ static int state9(char in, int *arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = ( *arg1 * 10 ) + a2d( in );
+            *arg1 = ( *arg1 * 10 ) + bwa2d( in );
             return 9;
         default:
             return -1;
@@ -185,7 +179,7 @@ static int statea(char in, int *arg2) {
         case '8':
         case '9':
         case '0':
-            *arg2 = a2d( in );
+            *arg2 = bwa2d( in );
             return 11;
         default:
             return -1;
@@ -207,7 +201,7 @@ static int stateb(char in, int arg1, int *arg2) {
         case '8':
         case '9':
         case '0':
-            *arg2 = ( *arg2 * 10 ) + a2d( in );
+            *arg2 = ( *arg2 * 10 ) + bwa2d( in );
             return 11;
         case '\r':
             train_speed(arg1, *arg2);
@@ -266,7 +260,7 @@ static int statef(char in, int *arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = a2d( in );
+            *arg1 = bwa2d( in );
             return 16;
         default:
             return -1;
@@ -288,7 +282,7 @@ static int stateg(char in, int *arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = ( *arg1 * 10 ) + a2d( in );
+            *arg1 = ( *arg1 * 10 ) + bwa2d( in );
             return 16;
         default:
             return -1;
@@ -343,7 +337,7 @@ state runState(char in) {
     static state cur_state = 0;
     static int arg1, arg2;
    
-    bwputc( COM2, in ); 
+    io_putc( COM2, in ); 
     switch(cur_state) {
         case 0:
             arg1 = 0;

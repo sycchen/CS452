@@ -1,6 +1,11 @@
 /*
  * 
  */
+void buffer_init(buffer *b) {
+    b->put_index = 0;
+    b->get_index = 0;
+}
+
 void buffer_put(buffer *b, char c) {
     b->buf[b->put_index] = c;
 

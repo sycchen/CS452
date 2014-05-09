@@ -11,9 +11,11 @@ typedef struct {
     char buf[MAX_BUFFER_SIZE];
 } buffer;
 
-int buffer_put(buffer b, char c);
+void buffer_init(buffer *b);
 
-char buffer_get(buffer b);
+int buffer_put(buffer *b, char c);
+
+char buffer_get(buffer *b);
 
 #endif
 

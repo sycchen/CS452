@@ -5,6 +5,7 @@
 #include <clock.h>
 #include <parser.h>
 #include <controller.h>
+#include <buffer.h>
 
 /*
  * Polling Loop
@@ -16,6 +17,7 @@ int main( int argc, const char* argv[] ) {
 
     /* Initialize io */
     char data_read;
+    io_initbuffer();
     io_setfifo( COM1, OFF );
     io_setspeed( COM1, 2400 );
     io_setfifo( COM2, OFF );
@@ -32,25 +34,19 @@ int main( int argc, const char* argv[] ) {
     /* Run instructions (Polling Loop) */
     while (system_status()) {
         /* Check Timer */
-        elapsed_time = timer_getTime();
-        // bwprintf( COM2, "\x1b[?25l\x1b[H");
-        // timer_printTime(elapsed_time);
-        // bwprintf( COM2, "\x1b[?25h");
-
+        if (elapsed_time != timer_getTime()) {
+            bwprintf( COM2, "\x1b[?25l\x1b[H");
+            timer_printTime(elapsed_time);
+            bwprintf( COM2, "\x1b[?25h");
+        }
+        
         /* Write Check */
-        /*
         if (io_canPut( COM1 ) > 0) {
-            char c = READ FROM BUFFER;
-            CHECK c;
-            io_putc( COM1, c);
+            io_putc_from_buf( COM1 );
         }
         if (io_canPut( COM2 ) > 0) {
-            char c = READ FROM BUFFER;
-            CHECK c;
-            io_putc( COM2, c);
+            int io_putc_from_buf( COM2 );
         }
-
-        */
 
         /* Read Check */
         /*

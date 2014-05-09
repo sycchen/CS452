@@ -4,11 +4,7 @@
 
 /* Sends signal to train console */
 static void send(char out) {
-    int *flags;
-    flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
-
-    while ( !( *flags & (CTS_MASK)) || ( *flags & (TXBUSY_MASK) ) ) ;
-    bwputc( COM1, out );
+    io_putc( COM1, out );
 }
 
 /* Tells the train system to turn on */
