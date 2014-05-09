@@ -81,7 +81,7 @@ int state2(char in) {
         case ' ':
             return 2;
         case '\r':
-            system_on();
+            train_speed();
             return 0;
         default:
             return -1;
