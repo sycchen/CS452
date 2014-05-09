@@ -4,47 +4,38 @@
 
 /* Run's the state giving it a char.
  * Will return the next state */
-struct state runState(char in, struct state *curState) {
-    bwputc( COM2, in );
-    bwputc( COM2, (char)(curState->fnid + 48) );
+struct state runState(char in, state curState) {
+    state new_state;
 
-    struct state new_state;
-
-    int new_fnid = -1;
-    switch(curState->fnid) {
+    switch(curState) {
         case 0:
-    bwputc( COM2, '0' );
-            new_fnid = initialState(in);
+        bwputc( COM2, '0' );
+            new_state = initialState(in);
             break;
         case 1:
-    bwputc( COM2, '1' );
-            new_fnid = state1(in);
+        bwputc( COM2, '1' );
+            new_state = state1(in);
             break;
         case 2:
-    bwputc( COM2, '2' );
-            new_fnid = state2(in);
+        bwputc( COM2, '2' );
+            new_state = state2(in);
             break;
         case 3:
-    bwputc( COM2, '3' );
-            new_fnid = state3(in);
+        bwputc( COM2, '3' );
+            new_state = state3(in);
             break;
         case 4:
-    bwputc( COM2, '4' );
-            new_fnid = state4(in);
+        bwputc( COM2, '4' );
+            new_state = state4(in);
             break;
         case 5:
-    bwputc( COM2, '5' );
-            new_fnid = state5(in);
+        bwputc( COM2, '5' );
+            new_state = state5(in);
             break;
         default:
-    bwputc( COM2, '-' );
+        bwputc( COM2, '-' );
+            new_state = -1;
             break;
-    }
-
-    if (in == '\n') {
-        new_state = (struct state){ 0, 0 };
-    } else {
-        new_state = (struct state){ new_fnid, curState };
     }
     
     return new_state;
