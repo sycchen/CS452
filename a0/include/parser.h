@@ -1,5 +1,5 @@
-#ifndef IPARSER_H
-#define IPARSER_H
+#ifndef PARSER_H
+#define PARSER_H
 
 /*
  * Using Finite State Machine:
@@ -7,12 +7,16 @@
  *      initialState  -(o)>  state1  -(n)>  state2
  *                                   -(f)>  state3  -(f)>  state4
  *                    -(q)>  state5
+ *                    -(t)>  state6  -(r)>  state7  -(_)>  state8  -(#)>  state9  -(_)>  statea  -(#)>  stateb  -(_)>  statec
+ *                    -(s)>  stated  -(w)>  statee  -(_)>  statef  -(#)>  stateg  -(_)>  stateh  -(s)>  statei
+ *                                                                                               -(c)>  statej
  *
  *      failState : All States can go to fail state?
  */
 
 /* State */
 typedef int state;
+
 // struct state {
 //     /* Function to use to get to next struct */
 //     int fnid;
@@ -21,14 +25,7 @@ typedef int state;
 //     struct state *last_state;   
 // };
 
-state runState(char in, state curState);
-int initialState(char in);
-int failState(char in);
-int state1(char in);
-int state2(char in);
-int state3(char in);
-int state4(char in);
-int state5(char in);
+state runState(char in);
 
 #endif
 

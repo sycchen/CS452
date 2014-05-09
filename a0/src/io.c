@@ -4,6 +4,7 @@
  *
  */
 
+#include <bwio.h>
 #include <ts7200.h>
 #include <io.h>
 
@@ -66,36 +67,80 @@ int io_canGet( int channel ) {
     int *flags;
 
     switch( channel ) {
-    case COM1:
-        flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
-        break;
-    case COM2:
-        flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
-        break;
-    default:
-        return -1;
-        break;
+//        case COM1:
+//            flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
+//            return (!(*flags & RXFF_MASK) && (*flags & CTS_MASK) && !(*flags & TXBUSY_MASK));
+//            break;
+        case COM2:
+            flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
+            return (*flags & RXFF_MASK );                       
+            break;
+        default:
+            return -1;
+            break;
     }
     
-    return (*flags & RXFF_MASK );
+    /* Should never get here */
+    return -1;
 }
 
 char io_getc( int channel ) {
     int *data;
 
     switch( channel ) {
-    case COM1:
-        data = (int *)( UART1_BASE + UART_DATA_OFFSET );
-        break;
-    case COM2:
-        data = (int *)( UART2_BASE + UART_DATA_OFFSET );
-        break;
-    default:
-        return -1;
-        break;
+//    case COM1:
+//        data = (int *)( UART1_BASE + UART_DATA_OFFSET );
+//        break;
+        case COM2:
+            data = (int *)( UART2_BASE + UART_DATA_OFFSET );
+            break;
+        default:
+            return -1;
+            break;
     }
     
-    int c = (char)(*data);
-    return c;
+    return (char)(*data);
+}
+
+/*
+ * Output
+ */
+int io_canPut() {
+    int *flags;
+
+    switch( channel ) {
+        case COM1:
+            flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
+            return (!(*flags & TXFF_MASK) && (*flags & CTS_MASK) && !(*flags & TXBUSY_MASK));
+            break;
+        case COM2:
+            flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
+            return (!(*flags & TXFF_MASK));
+            break;
+        default:
+            return -1;
+            break;
+    }
+
+    return -1;
+}
+
+int io_putc( int channel, char c ) {
+    int *data;
+    
+    switch( channel ) {
+        case COM1:
+            data = (int *)( UART1_BASE + UART_DATA_OFFSET );
+            break;
+        case COM2:
+            data = (int *)( UART2_BASE + UART_DATA_OFFSET );
+            break;
+        default:
+            return -1;
+            break;
+    }
+
+    *data = c;
+    return 0;
 }
 

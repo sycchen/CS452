@@ -17,7 +17,7 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 ARFLAGS = rcs
 
-all:  libbwio.a libclock.a libio.a libiparser.a libcontroller.a
+all:  libbwio.a libclock.a libio.a libparser.a libcontroller.a
 
 bwio.s: bwio.c 
 	$(XCC) -S $(CFLAGS) bwio.c
@@ -49,14 +49,14 @@ libio.a: io.o
 	$(AR) $(ARFLAGS) $@ io.o
 	mv $@ ../lib/.
 
-iparser.s: iparser.c 
-	$(XCC) -S $(CFLAGS) iparser.c
+parser.s: parser.c 
+	$(XCC) -S $(CFLAGS) parser.c
 
-iparser.o: iparser.s
-	$(AS) $(ASFLAGS) -o iparser.o iparser.s
+parser.o: parser.s
+	$(AS) $(ASFLAGS) -o parser.o parser.s
 
-libiparser.a: iparser.o
-	$(AR) $(ARFLAGS) $@ iparser.o
+libparser.a: parser.o
+	$(AR) $(ARFLAGS) $@ parser.o
 	mv $@ ../lib/.
 
 controller.s: controller.c 

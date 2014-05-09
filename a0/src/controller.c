@@ -3,12 +3,11 @@
 #include <controller.h>
 
 /* Sends signal to train console */
-void send(char out) {
+static void send(char out) {
     int *flags;
     flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
 
     while ( !( *flags & (CTS_MASK)) || ( *flags & (TXBUSY_MASK) ) ) ;
-    bwputc( COM2, 'r' );
     bwputc( COM1, out );
 }
 
@@ -23,20 +22,26 @@ void system_off() {
 }
 
 /* Set train speed */
-void train_speed() {
-    send((char)0xa);
-    send((char)0x2f);
+void train_speed(int train_number, int train_speed) {
+    send((char)train_speed);
+    send((char)train_number);
 }
 
 /* Sets switch */
-void switch_direction() {
-    send((char)0x21);
-    send((char)0xa);
+void switch_direction(int switch_number, char switch_direction) {
+    if (switch_direction == 'S' || switch_direction == 's') {
+        send((char)0x21);
+    } else if (siwtch_direction == 'C' || switch_direction == 'c') {
+        send((char)0x22);
+    } else {
+        return;
+    }
+    send((char)switch_number);
     send((char)0x20);
 }
 
 /* Status used by main while loop */
-int status = 1;
+static int status = 1;
 
 /* Tells the console to quit */
 void system_quit() {
