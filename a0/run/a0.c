@@ -12,7 +12,7 @@
 int main( int argc, const char* argv[] ) {
     /* Initialize IO variables */
     char data_read;
-    struct state cur_state = 0;
+    state cur_state = 0;
 
 
     /* Initialize Time and Timer */
@@ -28,7 +28,7 @@ int main( int argc, const char* argv[] ) {
 //    bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
 
     /* Run instructions (Polling Loop) */
-    while (system_status(0)) {
+    while (system_status()) {
         /* Check Timer */
         elapsed_time = timer_getTime();
 
@@ -42,7 +42,7 @@ int main( int argc, const char* argv[] ) {
 //            data_read = io_getc( COM2 );
 	    data_read = 0;
 	    data_read = (char)bwgetc( COM2 );
-        runState(data_read, 0);
+        cur_state = runState(data_read, cur_state);
 
 //        }
     }

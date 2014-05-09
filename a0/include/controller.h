@@ -4,7 +4,7 @@
 void system_on();
 void system_off();
 void system_quit();
-int system_status(int command);
+int system_status();
 
 #endif
 

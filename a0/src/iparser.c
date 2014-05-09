@@ -4,7 +4,7 @@
 
 /* Run's the state giving it a char.
  * Will return the next state */
-struct state runState(char in, state curState) {
+state runState(char in, state curState) {
     state new_state;
 
     switch(curState) {
@@ -43,7 +43,6 @@ struct state runState(char in, state curState) {
 
 /* The starting state */
 int initialState(char in) {
-    bwputc( COM2, 'i' );
     switch( in ) {
         case 'o':
             return 1;
@@ -81,7 +80,7 @@ int state2(char in) {
     switch( in ) {
         case ' ':
             return 2;
-        case '\n':
+        case '\r':
             system_on();
             return 0;
         default:
@@ -106,7 +105,7 @@ int state4(char in) {
     switch( in ) {
         case ' ':
             return 4;
-        case '\n':
+        case '\r':
             system_off();
             return 0;
         default:
@@ -120,7 +119,7 @@ int state5(char in) {
     switch( in ) {
         case ' ':
             return 5;
-        case '\n':
+        case '\r':
             system_quit();
             return 0;
         default:
