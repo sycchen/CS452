@@ -2,81 +2,21 @@
 #include <parser.h>
 #include <controller.h>
 
-/* Run's the state giving it a char.
- * Will return the next state */
-state runState(char in) {
-    static state cur_state = 0;
-    static int arg1, arg2;
-    
-    switch(cur_state) {
-        case 0:
-            arg1 = 0;
-            arg2 = 0;
-            cur_state = initialState(in);
-            break;
-        case 1:
-            cur_state = state1(in);
-            break;
-        case 2:
-            cur_state = state2(in);
-            break;
-        case 3:
-            cur_state = state3(in);
-            break;
-        case 4:
-            cur_state = state4(in);
-            break;
-        case 5:
-            cur_state = state5(in);
-            break;
-        case 6:
-            cur_state = state6(in);
-            break;
-        case 7:
-            cur_state = state7(in);
-            break;
-        case 8:
-            cur_state = state8(in, &arg1);
-            break;
-        case 9:
-            cur_state = state9(in, &arg1);
-            break;
-        case 10:
-            cur_state = statea(in, &arg2);
-            break;
-        case 11:
-            cur_state = stateb(in, arg1, &arg2);
-            break;
-        case 12:
-            cur_state = statec(in, arg1, arg2);
-            break;
-        case 13:
-            cur_state = stated(in);
-            break;
-        case 14:
-            cur_state = statee(in);
-            break;
-        case 15:
-            cur_state = statef(in, &arg1);
-            break;
-        case 16:
-            cur_state = stateg(in, &arg1);
-            break;
-        case 17:
-            cur_state = stateh(in);
-            break;
-        case 18:
-            cur_state = statei(in, arg1);
-            break;
-        case 19:
-            cur_state = statej(in, arg1);
-            break;
-        default:
-            cur_state = -1;
-            break;
-    }
+/*  */
+static int a2d(char ch) {
+    if (ch >= '0' && ch <= '9') return (ch - '0');
 
-    return cur_state;
+    return -1;
+}
+
+/* Fail state */
+static int failState(char in) {
+    switch( in ) {
+        case '\r':
+            return 0;
+        default:
+            return -1;
+    }
 }
 
 /* The starting state */
@@ -101,11 +41,6 @@ static int initialState(char in) {
     }
 }
 
-/* State where it can't lead to another command */
-static int failState(char in) {
-    return -1;
-}
-
 /* O */
 static int state1(char in) {
     switch( in ) {
@@ -126,7 +61,7 @@ static int state2(char in) {
         case ' ':
             return 2;
         case '\r':
-            switch_on();
+            system_on();
             return 0;
         default:
             return -1;
@@ -206,7 +141,7 @@ static int state8(char in, int *arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = bwa2d( in );
+            *arg1 = a2d( in );
             return 9;
         default:
             return -1;
@@ -228,7 +163,7 @@ static int state9(char in, int *arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = ( *arg1 * 10 ) + bwa2d( in );
+            *arg1 = ( *arg1 * 10 ) + a2d( in );
             return 9;
         default:
             return -1;
@@ -250,7 +185,7 @@ static int statea(char in, int *arg2) {
         case '8':
         case '9':
         case '0':
-            *arg2 = bwa2d( in );
+            *arg2 = a2d( in );
             return 11;
         default:
             return -1;
@@ -272,7 +207,7 @@ static int stateb(char in, int arg1, int *arg2) {
         case '8':
         case '9':
         case '0':
-            *arg2 = ( *arg2 * 10 ) + bwa2d( in );
+            *arg2 = ( *arg2 * 10 ) + a2d( in );
             return 11;
         case '\r':
             train_speed(arg1, *arg2);
@@ -317,7 +252,7 @@ static int statee(char in) {
 }
 
 /* SW_ */
-static int statef(char in, int &arg1) {
+static int statef(char in, int *arg1) {
     switch( in ) {
         case ' ':
             return 15;
@@ -331,7 +266,7 @@ static int statef(char in, int &arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = bwa2d( in );
+            *arg1 = a2d( in );
             return 16;
         default:
             return -1;
@@ -339,7 +274,7 @@ static int statef(char in, int &arg1) {
 }
 
 /* SW_# */
-static int stateg(char in, int &arg1) {
+static int stateg(char in, int *arg1) {
     switch( in ) {
         case ' ':
             return 17;
@@ -353,7 +288,7 @@ static int stateg(char in, int &arg1) {
         case '8':
         case '9':
         case '0':
-            *arg1 = ( *arg1 * 10 ) + bwa2d( in );
+            *arg1 = ( *arg1 * 10 ) + a2d( in );
             return 16;
         default:
             return -1;
@@ -401,3 +336,82 @@ static int statej(char in, int arg1) {
             return -1;
     }
 }
+
+/* Run's the state giving it a char.
+ * Will return the next state */
+state runState(char in) {
+    static state cur_state = 0;
+    static int arg1, arg2;
+   
+    bwputc( COM2, in ); 
+    switch(cur_state) {
+        case 0:
+            arg1 = 0;
+            arg2 = 0;
+            cur_state = initialState(in);
+            break;
+        case 1:
+            cur_state = state1(in);
+            break;
+        case 2:
+            cur_state = state2(in);
+            break;
+        case 3:
+            cur_state = state3(in);
+            break;
+        case 4:
+            cur_state = state4(in);
+            break;
+        case 5:
+            cur_state = state5(in);
+            break;
+        case 6:
+            cur_state = state6(in);
+            break;
+        case 7:
+            cur_state = state7(in);
+            break;
+        case 8:
+            cur_state = state8(in, &arg1);
+            break;
+        case 9:
+            cur_state = state9(in, &arg1);
+            break;
+        case 10:
+            cur_state = statea(in, &arg2);
+            break;
+        case 11:
+            cur_state = stateb(in, arg1, &arg2);
+            break;
+        case 12:
+            cur_state = statec(in, arg1, arg2);
+            break;
+        case 13:
+            cur_state = stated(in);
+            break;
+        case 14:
+            cur_state = statee(in);
+            break;
+        case 15:
+            cur_state = statef(in, &arg1);
+            break;
+        case 16:
+            cur_state = stateg(in, &arg1);
+            break;
+        case 17:
+            cur_state = stateh(in);
+            break;
+        case 18:
+            cur_state = statei(in, arg1);
+            break;
+        case 19:
+            cur_state = statej(in, arg1);
+            break;
+        default:
+            cur_state = failState(in);
+            break;
+    }
+
+    return cur_state;
+}
+

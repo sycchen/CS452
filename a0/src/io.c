@@ -67,10 +67,8 @@ int io_canGet( int channel ) {
     int *flags;
 
     switch( channel ) {
-//        case COM1:
-//            flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
-//            return (!(*flags & RXFF_MASK) && (*flags & CTS_MASK) && !(*flags & TXBUSY_MASK));
-//            break;
+        case COM1:
+            break;
         case COM2:
             flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
             return (*flags & RXFF_MASK );                       
@@ -84,13 +82,12 @@ int io_canGet( int channel ) {
     return -1;
 }
 
-char io_getc( int channel ) {
+int io_getc( int channel ) {
     int *data;
 
     switch( channel ) {
-//    case COM1:
-//        data = (int *)( UART1_BASE + UART_DATA_OFFSET );
-//        break;
+        case COM1:
+            break;
         case COM2:
             data = (int *)( UART2_BASE + UART_DATA_OFFSET );
             break;
@@ -99,13 +96,13 @@ char io_getc( int channel ) {
             break;
     }
     
-    return (char)(*data);
+    return *data;
 }
 
 /*
  * Output
  */
-int io_canPut() {
+int io_canPut( int channel ) {
     int *flags;
 
     switch( channel ) {

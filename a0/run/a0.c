@@ -11,13 +11,14 @@
  */
 int main( int argc, const char* argv[] ) {
     
+    /* Initialize Loop */
+    system_initialize();
 
     /* Initialize io */
     char data_read;
     io_setfifo( COM1, OFF );
     io_setspeed( COM1, 2400 );
     io_setfifo( COM2, OFF );
-    io_setspeed( COM2, 115200 );
 
     /* Initialize Time and Timer */
     time_t elapsed_time = 0;
@@ -25,7 +26,8 @@ int main( int argc, const char* argv[] ) {
 
 
     /* Initialize Scren */
-    bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
+    bwprintf( COM2, "\x1b[2J \x1b[H");
+//    bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
 
     /* Run instructions (Polling Loop) */
     while (system_status()) {
@@ -57,9 +59,9 @@ int main( int argc, const char* argv[] ) {
             io_getc( COM2 );
         }
         */
-        if (io_canGet( COM2 ) > 0) {
-            data_read = io_getc( COM2 );
-	        runState(data_read);
+        if (io_canGet( COM2 )) {
+            data_read = (char)io_getc( COM2 );
+            runState(data_read);
         }
     }
 

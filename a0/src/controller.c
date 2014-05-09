@@ -28,10 +28,10 @@ void train_speed(int train_number, int train_speed) {
 }
 
 /* Sets switch */
-void switch_direction(int switch_number, char switch_direction) {
+void switch_direction(int switch_number, char switch_direction) { 
     if (switch_direction == 'S' || switch_direction == 's') {
         send((char)0x21);
-    } else if (siwtch_direction == 'C' || switch_direction == 'c') {
+    } else if (switch_direction == 'C' || switch_direction == 'c') {
         send((char)0x22);
     } else {
         return;
@@ -41,7 +41,12 @@ void switch_direction(int switch_number, char switch_direction) {
 }
 
 /* Status used by main while loop */
-static int status = 1;
+static int status;
+
+/* System Initialize Status */
+void system_initialize() {
+    status = 1;
+}
 
 /* Tells the console to quit */
 void system_quit() {
