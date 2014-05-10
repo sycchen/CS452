@@ -12,9 +12,6 @@
  * Polling Loop
  */
 int main( int argc, const char* argv[] ) {
-    /* Needed to make bwio work? */
-    bwprintf( COM2, "\x1b[H");
-
     /* Initialize Loop */
     system_initialize();
     
@@ -63,6 +60,9 @@ int main( int argc, const char* argv[] ) {
             runState(data_read);
         }
     }
+
+    /* Clear screen */
+    bwprintf( COM2, "\x1b[H\x1b[J\x1b[r" );
 
     return 0;
 }

@@ -2,6 +2,7 @@
 #include <io.h>
 #include <parser.h>
 #include <controller.h>
+#include <terminal.h>
 
 /* Fail state */
 static int failState(char in) {
@@ -342,7 +343,6 @@ void state_init() {
 state runState(char in) {
     static int arg1, arg2;
    
-    io_putc( COM2, in ); 
     switch(cur_state) {
         case 0:
             arg1 = 0;
@@ -409,6 +409,13 @@ state runState(char in) {
         default:
             cur_state = failState(in);
             break;
+    }
+
+    if (in == '\r') {
+        input_print();
+        cur_state = 0; 
+    } else {
+        io_putc( COM2, in );
     }
 
     return cur_state;
