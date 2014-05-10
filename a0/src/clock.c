@@ -17,6 +17,14 @@ void timer_init() {
  * Reads from the Timer
  */
 time_t timer_getTime() {
-    return ((((time_t)TIMER_CLICKS_IN_DAY - (time_t)(*((int *)( TIMER3_BASE + VAL_OFFSET ))))/2)/100);
+    time_t timer = *((time_t *)( TIMER3_BASE + VAL_OFFSET));
+    return (((time_t)TIMER_CLICKS_IN_DAY - timer)/200);
 }
 
+/*
+ * Debugging
+ */ 
+void printTime() {
+    time_t timer = *((time_t *)( TIMER3_BASE + VAL_OFFSET));
+    io_printf(COM2, "%u::%u\r", (time_t)TIMER_CLICKS_IN_DAY, timer);
+}

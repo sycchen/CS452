@@ -79,6 +79,8 @@ int io_canGet( int channel ) {
 
     switch( channel ) {
         case COM1:
+            flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
+            return (*flags & RXFF_MASK );
             break;
         case COM2:
             flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
@@ -98,6 +100,7 @@ int io_getc( int channel ) {
 
     switch( channel ) {
         case COM1:
+            data = (int *)( UART1_BASE + UART_DATA_OFFSET ); 
             break;
         case COM2:
             data = (int *)( UART2_BASE + UART_DATA_OFFSET );

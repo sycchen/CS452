@@ -4,7 +4,7 @@
 /*
  * Buffer Array
  */
-#define MAX_BUFFER_SIZE 128
+#define MAX_BUFFER_SIZE 256
 
 typedef struct {
     int get_index, put_index;

@@ -30,6 +30,7 @@ int main( int argc, const char* argv[] ) {
     timer_init();
 
     /* Initialize Screen */
+    sensor_init();
     term_print();
 
     /* Run instructions (Polling Loop) */
@@ -38,6 +39,7 @@ int main( int argc, const char* argv[] ) {
         if (elapsed_time != timer_getTime()) {
             elapsed_time = timer_getTime();
             time_print(elapsed_time);
+            sensor_print();
         }
         
         /* Write Check */

@@ -24,5 +24,7 @@
      */
     void timer_printTime(time_t elapsed_time);
 
+    void printTime();
+
 #endif
 
