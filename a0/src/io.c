@@ -7,6 +7,7 @@
 #include <bwio.h>
 #include <ts7200.h>
 #include <io.h>
+#include <buffer.h>
 
 /*
  * Buffers
@@ -150,7 +151,9 @@ int io_putc_from_buf( int channel ) {
             break;
     }
 
-    if (c != (char)0) *data = c;
+    if (c != (char)0) {
+	*data = c;
+    }
     return 0;
 }
 
@@ -170,7 +173,7 @@ int io_putc( int channel, char c ) {
     return 0;
 }
 
-void bwputw( int channel, int n, char fc, char *bf ) {
+void io_putw( int channel, int n, char fc, char *bf ) {
     char ch;
     char *p = bf;
 

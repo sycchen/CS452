@@ -331,10 +331,15 @@ static int statej(char in, int arg1) {
     }
 }
 
+/* State and initializer */
+static state cur_state;
+void state_init() {
+    cur_state = 0;
+}
+
 /* Run's the state giving it a char.
  * Will return the next state */
 state runState(char in) {
-    static state cur_state = 0;
     static int arg1, arg2;
    
     io_putc( COM2, in ); 

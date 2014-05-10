@@ -76,7 +76,7 @@ buffer.o: buffer.s
 	$(AS) $(ASFLAGS) -o buffer.o buffer.s
 
 libbuffer.a: buffer.o
-	$(AR) $(ARFLAGS) $@buffer.o
+	$(AR) $(ARFLAGS) $@ buffer.o
 	mv $@ ../lib/.
 
 clean:

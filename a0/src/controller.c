@@ -1,4 +1,5 @@
 #include <ts7200.h>
+#include <io.h>
 #include <bwio.h>
 #include <controller.h>
 

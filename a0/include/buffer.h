@@ -1,5 +1,5 @@
-#ifndef IO_H
-#define IO_H
+#ifndef BUFFER_H
+#define BUFFER_H
 
 /*
  * Buffer Array
@@ -13,7 +13,7 @@ typedef struct {
 
 void buffer_init(buffer *b);
 
-int buffer_put(buffer *b, char c);
+void buffer_put(buffer *b, char c);
 
 char buffer_get(buffer *b);
 

@@ -14,6 +14,7 @@ int main( int argc, const char* argv[] ) {
     
     /* Initialize Loop */
     system_initialize();
+    state_init();
 
     /* Initialize io */
     char data_read;
@@ -28,16 +29,16 @@ int main( int argc, const char* argv[] ) {
 
 
     /* Initialize Scren */
-    bwprintf( COM2, "\x1b[2J \x1b[H");
-//    bwprintf( COM2, "\x1b[?25l \x1b[2J \x1b[H");
+    bwprintf( COM2, "\x1b[2J\x1b[2;0H");
 
     /* Run instructions (Polling Loop) */
     while (system_status()) {
         /* Check Timer */
         if (elapsed_time != timer_getTime()) {
-            bwprintf( COM2, "\x1b[?25l\x1b[H");
+            elapsed_time = timer_getTime();
+	    io_printf( COM2, "\x1b[s\x1b[H");
             timer_printTime(elapsed_time);
-            bwprintf( COM2, "\x1b[?25h");
+            io_printf( COM2, "\x1b[u");
         }
         
         /* Write Check */
@@ -45,7 +46,7 @@ int main( int argc, const char* argv[] ) {
             io_putc_from_buf( COM1 );
         }
         if (io_canPut( COM2 ) > 0) {
-            int io_putc_from_buf( COM2 );
+            io_putc_from_buf( COM2 );
         }
 
         /* Read Check */

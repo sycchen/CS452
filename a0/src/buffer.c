@@ -1,3 +1,6 @@
+#include <buffer.h>
+#include <bwio.h>
+
 /*
  * 
  */
@@ -8,7 +11,7 @@ void buffer_init(buffer *b) {
 
 void buffer_put(buffer *b, char c) {
     b->buf[b->put_index] = c;
-
+ 
     b->put_index++;
     if (b->put_index == MAX_BUFFER_SIZE) b->put_index = 0;
 }
@@ -25,3 +28,5 @@ char buffer_get(buffer *b) {
 
     return c;
 }
+
+

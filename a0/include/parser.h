@@ -25,6 +25,7 @@ typedef int state;
 //     struct state *last_state;   
 // };
 
+void state_init();
 state runState(char in);
 
 #endif
