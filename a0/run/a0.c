@@ -40,9 +40,7 @@ int main( int argc, const char* argv[] ) {
         /* Check Timer */
         if (elapsed_time != timer_getTime()) {
             elapsed_time = timer_getTime();
-            io_printf( COM2, "\x1b[s\x1b[H");
-            timer_printTime(elapsed_time);
-            io_printf( COM2, "\x1b[u");
+            time_print(elapsed_time);
         }
         
         /* Write Check */
@@ -68,3 +66,4 @@ int main( int argc, const char* argv[] ) {
 
     return 0;
 }
+
