@@ -17,7 +17,7 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 ARFLAGS = rcs
 
-all:  libbwio.a libclock.a libio.a libparser.a libcontroller.a libbuffer.a
+all:  libbwio.a libclock.a libio.a libparser.a libcontroller.a libbuffer.a libterminal.a
 
 bwio.s: bwio.c 
 	$(XCC) -S $(CFLAGS) bwio.c

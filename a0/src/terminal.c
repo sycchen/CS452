@@ -1,4 +1,6 @@
 #include <terminal.h>
+#include <bwio.h>
+#include <io.h>
 
 /*
  * Function to initialize terminal
