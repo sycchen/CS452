@@ -37,7 +37,7 @@ void switch_direction(int switch_number, char switch_direction) {
     send((char)0x20);
 }
 
-/* Status used by main while loop */
+/* Status used polling loop */
 static int status;
 
 /* System Initialize Status */

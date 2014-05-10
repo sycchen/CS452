@@ -30,7 +30,6 @@ int main( int argc, const char* argv[] ) {
     timer_init();
 
     /* Initialize Screen */
-    bwprintf( COM2, "\x1b[2J");
     term_print();
 
     /* Run instructions (Polling Loop) */

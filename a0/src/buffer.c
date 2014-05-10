@@ -2,13 +2,16 @@
 #include <bwio.h>
 
 /*
- * 
+ * Initialize the buffer
  */
 void buffer_init(buffer *b) {
     b->put_index = 0;
     b->get_index = 0;
 }
 
+/*
+ * Put a character in the buffer
+ */
 void buffer_put(buffer *b, char c) {
     b->buf[b->put_index] = c;
  
@@ -16,6 +19,9 @@ void buffer_put(buffer *b, char c) {
     if (b->put_index == MAX_BUFFER_SIZE) b->put_index = 0;
 }
 
+/*
+ * Get a character from the buffer
+ */
 char buffer_get(buffer *b) {
     if (b->get_index == b->put_index) {
         return (char)0;
