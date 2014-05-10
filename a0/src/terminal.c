@@ -11,34 +11,38 @@ void term_print() {
     bwprintf( COM2, "\x1b[2J\x1b[H\x1b[r");
 
     /* Print terminal */
-    
-
-    bwprintf( COM2, "+---------------------------------------------------------------------------+\r" );
-    bwprintf( COM2, "| ExpressOS >                                  +--------------------------+ |\r" );
-    bwprintf( COM2, "|                                              |    Timer:  00:00:00:0    | |\r" );
-    bwprintf( COM2, "|                                              +--------------------------+ |\r" );
-    bwprintf( COM2, "|                                              +------+ +-----------------+ |\r" );
-    bwprintf( COM2, "|                                              |sensor| |    Switches     | |\r" );
-    bwprintf( COM2, "|                                              +------+ +--------+--------+ |\r" );
-    bwprintf( COM2, "|                                              |      | | 01:  s | 02:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 03:  s | 04:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 05:  s | 06:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 07:  s | 08:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 09:  s | 10:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 11:  s | 12:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 13:  s | 14:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 15:  s | 16:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 17:  s | 18:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 99:  s | 9A:  s | |\r" );
-    bwprintf( COM2, "|                                              |      | | 9C:  s | 9B:  s | |\r" );
-    bwprintf( COM2, "|                                              +------+ +--------+--------+ |\r" );
-    bwprintf( COM2, "+---------------------------------------------------------------------------+\r" );
+    bwprintf( COM2, "+-------------------------------------------------------------------------+\r" );
+    bwprintf( COM2, "| +-------------------+ +-----------------------------------------------+ |\r" );
+    bwprintf( COM2, "| | Timer: 00:00:00:0 | |                   Switches                    | |\r" );
+    bwprintf( COM2, "| +-------------------+ +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| +-------------------+ | 01: s | 02: s | 03: s | 04: s | 05: s | 06: s | |\r" );
+    bwprintf( COM2, "| |      Sensor       | +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| +-------------------+ | 07: s | 09: s | 10: s | 11: s | 12: s | 13: s | |\r" );
+    bwprintf( COM2, "| | 00    00    00    | +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| | 00    00    00    | | 07: s | 09: s | 10: s | 11: s | 12: s | 13: s | |\r" );
+    bwprintf( COM2, "| | 00    00    00    | +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| | 00    00    00    | | 07: s | 09: s | 10: s | 11: s | 12: s | 13: s | |\r" );
+    bwprintf( COM2, "| +-------------------+ +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| ExpressOS >                                                             |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "|                                                                         |\r" );
+    bwprintf( COM2, "+-------------------------------------------------------------------------+\r" );
 
     /* Set up scrolling */
-    bwprintf( COM2, "\x1b[2;19r" );
+    bwprintf( COM2, "\x1b[13;25r" );
 
     /* Go to start position */
-    bwprintf( COM2, "\x1b[2;15H" );
+    bwprintf( COM2, "\x1b[13;15H" );
 }
 
 /*
@@ -86,7 +90,7 @@ void time_print(time_t elapsed_time) {
         padding_hours = "0";
     }
 
-    io_printf( COM2, "\x1b[s\x1b[3;61H%s%u:%s%u:%s%u:%u\x1b[u", 
+    io_printf( COM2, "\x1b[s\x1b[3;12H%s%u:%s%u:%s%u:%u\x1b[u", 
                padding_hours, hours, padding_minutes, minutes, 
                padding_seconds, seconds, milliseconds);
 }
