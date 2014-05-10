@@ -25,7 +25,7 @@ a0.o: a0.s
 	$(AS) $(ASFLAGS) -o a0.o a0.s
 
 a0.elf: a0.o
-	$(LD) $(LDFLAGS) -o $@ a0.o -lbwio -lclock -lio -lparser -lcontroller -lbuffer -lgcc
+	$(LD) $(LDFLAGS) -o $@ a0.o -lbwio -lclock -lio -lparser -lcontroller -lbuffer -lterminal -lgcc
 
 clean:
 	-rm -f a0.elf *.s *.o a0.map

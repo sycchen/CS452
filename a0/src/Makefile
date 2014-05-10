@@ -79,5 +79,16 @@ libbuffer.a: buffer.o
 	$(AR) $(ARFLAGS) $@ buffer.o
 	mv $@ ../lib/.
 
+terminal.s: terminal.c 
+	$(XCC) -S $(CFLAGS) terminal.c
+
+terminal.o: terminal.s
+	$(AS) $(ASFLAGS) -o terminal.o terminal.s
+
+libterminal.a: terminal.o
+	$(AR) $(ARFLAGS) $@ terminal.o
+	mv $@ ../lib/.
+
+
 clean:
 	-rm -f *.s *.a *.o

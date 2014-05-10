@@ -6,37 +6,39 @@
 #include <parser.h>
 #include <controller.h>
 #include <buffer.h>
+#include <terminal.h>
 
 /*
  * Polling Loop
  */
 int main( int argc, const char* argv[] ) {
-    
     /* Initialize Loop */
     system_initialize();
-    state_init();
-
+    
     /* Initialize io */
     char data_read;
     io_initbuffer();
     io_setfifo( COM1, OFF );
     io_setspeed( COM1, 2400 );
     io_setfifo( COM2, OFF );
+    
+    /* Initialize Parser */
+    state_init();
 
     /* Initialize Time and Timer */
     time_t elapsed_time = 0;
     timer_init();
 
-
-    /* Initialize Scren */
-    bwprintf( COM2, "\x1b[2J\x1b[2;0H");
+    /* Initialize Screen */
+    bwprintf( COM2, "\x1b[2J");
+    term_print();
 
     /* Run instructions (Polling Loop) */
     while (system_status()) {
         /* Check Timer */
         if (elapsed_time != timer_getTime()) {
             elapsed_time = timer_getTime();
-	    io_printf( COM2, "\x1b[s\x1b[H");
+            io_printf( COM2, "\x1b[s\x1b[H");
             timer_printTime(elapsed_time);
             io_printf( COM2, "\x1b[u");
         }
