@@ -2,39 +2,65 @@
 #include <io.h>
 #include <bwio.h>
 #include <controller.h>
+#include <terminal.h>
 
-/* Sends signal to train console */
-static void send(char out) {
-    io_putc( COM1, out );
+
+/* Initialize all */
+void system_init() {
+    /* Initialize Switches */
+    int i;
+    for (i = 1; i <= 18; i++) {
+        bwputc( COM1, (char)0x21 );
+        bwputc( COM1, (char)i );
+        bwputc( COM1, (char)0x20 );
+    }
+
+    bwputc( COM1, (char)0x21 );
+    bwputc( COM1, (char)0x99 );
+    bwputc( COM1, (char)0x20 );
+
+    bwputc( COM1, (char)0x21 );
+    bwputc( COM1, (char)0x9a );
+    bwputc( COM1, (char)0x20 );
+
+    bwputc( COM1, (char)0x21 );
+    bwputc( COM1, (char)0x9b );
+    bwputc( COM1, (char)0x20 );
+
+    bwputc( COM1, (char)0x21 );
+    bwputc( COM1, (char)0x9c );
+    bwputc( COM1, (char)0x20 );
 }
 
 /* Tells the train system to turn on */
 void system_on() {
-    send((char)0x60);
+    io_putc( COM1, (char)0x60 );
 }
 
 /* Tells the train system to turn off */
 void system_off() {
-    send((char)0x61);
+    io_putc( COM1, (char)0x61 );
 }
 
 /* Set train speed */
 void train_speed(int train_number, int train_speed) {
-    send((char)train_speed);
-    send((char)train_number);
+    io_putc( COM1, (char)train_speed );
+    io_putc( COM1, (char)train_number );
 }
 
 /* Sets switch */
 void switch_direction(int switch_number, char switch_direction) { 
     if (switch_direction == 'S' || switch_direction == 's') {
-        send((char)0x21);
+        io_putc( COM1, (char)0x21 );
     } else if (switch_direction == 'C' || switch_direction == 'c') {
-        send((char)0x22);
+        io_putc( COM1, (char)0x22 );
     } else {
         return;
     }
-    send((char)switch_number);
-    send((char)0x20);
+    io_putc( COM1, (char)switch_number );
+    io_putc( COM1, (char)0x20 );
+
+    switch_print( switch_number, char switch_direction );
 }
 
 /* Status used polling loop */

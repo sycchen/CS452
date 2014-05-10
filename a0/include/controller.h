@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+void system_init();
 void system_on();
 void system_off();
 void system_initialize();

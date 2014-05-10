@@ -22,7 +22,7 @@ int bwsetfifo( int channel, int state ) {
 		line = (int *)( UART1_BASE + UART_LCRH_OFFSET );
 	        break;
 	case COM2:
-	        line = (int *)( UART2_BASE + UART_LCRH_OFFSET );
+	    line = (int *)( UART2_BASE + UART_LCRH_OFFSET );
 	        break;
 	default:
 	        return -1;
@@ -78,7 +78,7 @@ int bwputc( int channel, char c ) {
 		return -1;
 		break;
 	}
-	while( ( *flags & TXFF_MASK ) ) ;
+	while( ( *flags & TXFF_MASK ) || !(*flags & CTS_MASK) || (*flags & TXBUSY_MASK) ) ;
 	*data = c;
 	return 0;
 }

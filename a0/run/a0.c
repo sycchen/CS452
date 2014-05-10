@@ -25,13 +25,16 @@ int main( int argc, const char* argv[] ) {
     /* Initialize Parser */
     state_init();
 
-    /* Initialize Time and Timer */
-    time_t elapsed_time = 0;
-    timer_init();
+    /* Initialize Trains and switches */
+    system_init();
 
     /* Initialize Screen */
     sensor_init();
-    term_print();
+    term_init();
+
+    /* Initialize Time and Timer */
+    time_t elapsed_time = 0;
+    timer_init();
 
     /* Run instructions (Polling Loop) */
     while (system_status()) {
@@ -64,8 +67,8 @@ int main( int argc, const char* argv[] ) {
     }
 
     /* Clear screen */
-    bwprintf( COM2, "\x1b[H\x1b[J\x1b[r" );
-
+    term_kill();
+    
     return 0;
 }
 

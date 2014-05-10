@@ -6,7 +6,7 @@
 /*
  * Function to initialize terminal
  */
-void term_print() {
+void term_init() {
     /* Clear screen and set cursor position to 0,0 and reset scrolling and show cursor */
     bwprintf( COM2, "\x1b[2J\x1b[H\x1b[r\x1b[?25h");
 
@@ -17,12 +17,12 @@ void term_print() {
     bwprintf( COM2, "| +-------------------+ +-------+-------+-------+-------+-------+-------+ |\r" );
     bwprintf( COM2, "| +-------------------+ | 01: s | 02: s | 03: s | 04: s | 05: s | 06: s | |\r" );
     bwprintf( COM2, "| |      Sensor       | +-------+-------+-------+-------+-------+-------+ |\r" );
-    bwprintf( COM2, "| +---------+---------+ | 07: s | 09: s | 10: s | 11: s | 12: s | 13: s | |\r" );
+    bwprintf( COM2, "| +---------+---------+ | 07: s | 08: s | 09: s | 10: s | 11: s | 12: s | |\r" );
     bwprintf( COM2, "| |   00    |   00    | +-------+-------+-------+-------+-------+-------+ |\r" );
-    bwprintf( COM2, "| |   00    |   00    | | 07: s | 09: s | 10: s | 11: s | 12: s | 13: s | |\r" );
-    bwprintf( COM2, "| |   00    |   00    | +-------+-------+-------+-------+-------+-------+ |\r" );
-    bwprintf( COM2, "| |   00    |   00    | | 07: s | 09: s | 10: s | 11: s | 12: s | 13: s | |\r" );
-    bwprintf( COM2, "| +-------------------+ +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| |   00    |   00    | | 13: s | 14: s | 15: s | 16: s | 17: s | 18: s | |\r" );
+    bwprintf( COM2, "| |   00    |   00    | +-------+---+---+-------+-------+---+---+-------+ |\r" );
+    bwprintf( COM2, "| |   00    |   00    | | 0x99: s   | 0x9a: s   | 0x9b: s   | 0x9c: s   | |\r" );
+    bwprintf( COM2, "| +-------------------+ +-----------+-----------+-----------+-----------+ |\r" );
     bwprintf( COM2, "| ExpressOS >                                                             |\r" );
     bwprintf( COM2, "|                                                                         |\r" );
     bwprintf( COM2, "|                                                                         |\r" );
@@ -43,6 +43,13 @@ void term_print() {
 
     /* Go to start position */
     bwprintf( COM2, "\x1b[13;15H" );
+}
+
+/*
+ * Function to reset terminal
+ */
+void term_kill() {
+    bwprintf( COM2, "\x1b[H\x1b[J\x1b[r" );
 }
 
 /*
@@ -105,8 +112,79 @@ void input_print() {
 /*
  * Function to change a switch display
  */
-void switch_print() {
-
+void switch_print(int switch_number, char switch_direction) {
+    io_printf( COM2, "\x1b[s" );
+    
+    switch( switch_number ) {
+        case 1:
+            io_printf( COM2, "\x1b[5;31H" );
+            break;
+        case 2:
+            io_printf( COM2, "\x1b[5;39H" );
+            break;
+        case 3:
+            io_printf( COM2, "\x1b[5;47H" );
+            break;
+        case 4:
+            io_printf( COM2, "\x1b[5;55H" );
+            break;
+        case 5:
+            io_printf( COM2, "\x1b[5;63H" );
+            break;
+        case 6:
+            io_printf( COM2, "\x1b[5;71H" );
+            break;
+        case 7:
+            io_printf( COM2, "\x1b[6;31H" );
+            break;
+        case 8:
+            io_printf( COM2, "\x1b[6;39H" );
+            break;
+        case 9:
+            io_printf( COM2, "\x1b[6;47H" );
+            break;
+        case 10:
+            io_printf( COM2, "\x1b[6;55H" );
+            break;
+        case 11:
+            io_printf( COM2, "\x1b[6;63H" );
+            break;
+        case 12:
+            io_printf( COM2, "\x1b[6;71H" );
+            break;
+        case 13:
+            io_printf( COM2, "\x1b[7;31H" );
+            break;
+        case 14:
+            io_printf( COM2, "\x1b[7;39H" );
+            break;
+        case 15:
+            io_printf( COM2, "\x1b[7;47H" );
+            break;
+        case 16:
+            io_printf( COM2, "\x1b[7;55H" );
+            break;
+        case 17:
+            io_printf( COM2, "\x1b[7;63H" );
+            break;
+        case 18:
+            io_printf( COM2, "\x1b[7;71H" );
+            break;
+        case 153:
+            io_printf( COM2, "\x1b[8;33H" );
+            break;
+        case 154:
+            io_printf( COM2, "\x1b[8;45H" );
+            break;
+        case 155:
+            io_printf( COM2, "\x1b[8;57H" );
+            break;
+        case 156:
+            io_printf( COM2, "\x1b[8;69H" );
+            break;
+    }
+    io_putc( COM2, switch_direction );
+    io_printf( COM2, "\x1b[u" );
 }
 
 /*
