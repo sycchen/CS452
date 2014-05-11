@@ -4,10 +4,15 @@
 #include <controller.h>
 #include <terminal.h>
 
+/* Current State */
+static state cur_state;
+
 /* Fail state */
 static int failState(char in) {
     switch( in ) {
         case '\r':
+            input_print(0);
+            io_printf(COM2, "Invalid Command")
             return 0;
         default:
             return -1;
@@ -396,7 +401,7 @@ static int staten(char in, int *arg1) {
             *arg1 = ( *arg1 * 10 ) + bwa2d( in );
             return 23;
         case '\r':
-            reverse(*arg1);
+            train_reverse(*arg1);
             return 0;
         default:
             return -1;
@@ -409,7 +414,7 @@ static int stateo(char in, int arg1) {
         case ' ':
             return 24;
         case '\r':
-            reverse(arg1);
+            train_reverse(arg1);
             return 0;
         default:
             return -1;
@@ -417,19 +422,18 @@ static int stateo(char in, int arg1) {
 }
 
 
-/* State and initializer */
-static state cur_state;
+/* Initializer */
 void state_init() {
     cur_state = 0;
 }
 
-/* Run's the state giving it a char.
- * Will return the next state */
+/* Parse a character */
 state runState(char in) {
     static int arg1 = 0;
     static int arg2 = 0;
 
-    if (in == '\x1b') return 0;
+    if (in == '\x1b') return cur_state;
+    else if (in == char(0x8)) return cur_state;
    
     switch(cur_state) {
         case 0:
@@ -515,7 +519,7 @@ state runState(char in) {
     }
 
     if (in == '\r') {
-        input_print();
+        input_print(1);
         cur_state = 0; 
     } else {
         io_putc( COM2, in );

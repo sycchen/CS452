@@ -4,8 +4,34 @@
 #include <controller.h>
 #include <terminal.h>
 
+
+/* Variables global to file */
+static int status = 0;
+static int sensor_id = 0;
+static int sensor_count = 0;
+static int count = 0;
+
+static int reverse_time[MAX_REVERSE_QUEUE] = { 0 };
+static int reverse_train[MAX_REVERSE_QUEUE] = { 0 };
+
 /* Initialize all */
 void system_init() {
+    /* Initialize Status so polling loop will run */
+    status = 1;
+
+    /* Initialize reverse arrays */
+    int i;
+    for (i = 0; i < MAX_REVERSE_QUEUE; i++) {
+        reverse_time[i] = 0;
+        reverse_train[i] = 0;
+    }
+
+    /* Initialize sensor variables */
+    sensor_id = 0xe00;
+    sensor_count = 8;
+    sensor_temp = 6;
+    count = 0;
+
     /* Turn System On */
     bwputc( COM1, (char)0x60 );
     
@@ -34,27 +60,26 @@ void system_init() {
     bwputc( COM1, (char)0x20 );
 }
 
-/* Tells the train system to turn on */
+/* System functions */
 void system_on() {
     io_putc( COM1, (char)0x60 );
 }
-
-/* Tells the train system to turn off */
 void system_off() {
     io_putc( COM1, (char)0x61 );
 }
+void system_quit() {
+    status = 0;
+}
+int system_status() {
+    return status;
+}
 
-/* Set train speed */
+/* Train functions */
 void train_speed(int train_number, int train_speed) {
     io_putc( COM1, (char)train_speed );
     io_putc( COM1, (char)train_number );
 }
-
-/* Reverse */
-#define MAX_REVERSE_QUEUE 4
-static int reverse_time[MAX_REVERSE_QUEUE] = { 0 };
-static int reverse_train[MAX_REVERSE_QUEUE] = { 0 };
-void reverse(int train_number) {
+void train_reverse(int train_number) {
     train_speed(train_number, 0);
 
     /* Throw in queue */
@@ -65,16 +90,14 @@ void reverse(int train_number) {
     }
     reverse_train[i] = train_number;
 }
-
-/* Run reversed trains */
-void reverse_checkQueue(int cur_time) {
+void train_reverse_checkQueue(int cur_time) {
     int i;
     for (i = 0; i < MAX_REVERSE_QUEUE; i++) { 
         if (reverse_train[i] == 0) {
             return;
         } else if (reverse_time[i] == 0) {
             reverse_time[i] = cur_time;
-        } else if ((reverse_time[i] + 10) < cur_time) {
+        } else if ((reverse_time[i] + 15) < cur_time) {
             train_speed(reverse_train[i], 15);
             reverse_time[i] = 0;
             reverse_train[i] = 0;
@@ -82,7 +105,7 @@ void reverse_checkQueue(int cur_time) {
     }
 }
 
-/* Sets switch */
+/* Switch functions */
 void switch_direction(int switch_number, char switch_direction) { 
     if (switch_direction == 'S' || switch_direction == 's') {
         io_putc( COM1, (char)0x21 );
@@ -97,26 +120,44 @@ void switch_direction(int switch_number, char switch_direction) {
     switch_print( switch_number, switch_direction );
 }
 
-/* Status used polling loop */
-static int status = 0;
+/* Sensor */
+void checkSensors(char sensor_read) {
+    /* read sensor */    
+    if (sensor_read & SMASK8) {
+        sensor_add(sensor_id + (sensor_count * 8) + 1);  
+    } if (sensor_read & SMASK7) {
+        sensor_add(sensor_id + (sensor_count * 14) + 2);  
+    } if (sensor_read & SMASK6) {
+        sensor_add(sensor_id + (sensor_count * 14) + 3);  
+    } if (sensor_read & SMASK5) {
+        sensor_add(sensor_id + (sensor_count * 14) + 4);  
+    } if (sensor_read & SMASK4) {
+        sensor_add(sensor_id + (sensor_count * 14) + 5);  
+    } if (sensor_read & SMASK3) {
+        sensor_add(sensor_id + (sensor_count * 14) + 6);  
+    } if (sensor_read & SMASK2) {
+        sensor_add(sensor_id + (sensor_count * 14) + 7);  
+    } if (sensor_read & SMASK1) {
+        sensor_add(sensor_id + (sensor_count * 14) + 8);  
+    }
 
-/* System Initialize Status */
-void system_initialize() {
-    status = 1;
+    /* Which sensor is this */
+    if (sensor_count == 1) {
+        sensor_count = 0;
+        sensor_id += 0x100;
+    } else {
+        sensor_count == 1;
+    }
+    
+    if (sensor_id > 0xe00) {
+        sensor_id = 0xa00;
+    }
 
-    int i;
-    for (i = 0; i < MAX_REVERSE_QUEUE; i++) {
-        reverse_time[i] = 0;
-        reverse_train[i] = 0;
+    /* Count for request */
+    count++;
+    if (count == 10) {
+        count = 0;
+        io_putc(COM1, (char)133);
     }
 }
 
-/* Tells the console to quit */
-void system_quit() {
-    status = 0;;
-}
-
-/* Returns wether the system should quit or not */
-int system_status() {
-    return status;
-}

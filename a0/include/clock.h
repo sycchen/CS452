@@ -17,14 +17,5 @@
      */
     time_t timer_getTime();
 
-    /*
-     * Prints the formatted version of the given time
-     * Format: hh:MM:ss:mmm
-     * Takes time in milliseconds as input
-     */
-    void timer_printTime(time_t elapsed_time);
-
-    void printTime();
-
 #endif
 

@@ -3,10 +3,19 @@
 #include <types.h>
 #include <io.h>
 
-/*
- * Function to initialize terminal
- */
+/* Global */
+static int sensor_display[8] = {0};
+static int sensor_flag = 1;
+
+/* Function to initialize terminal */
 void term_init() {
+    /* Init Sensor print buffer */
+    int i;
+    for (i = 0; i < 8; i++) {
+        sensor_display[i] = 0;
+    }
+    sensor_flag = 1;
+
     /* Clear screen and set cursor position to 0,0 and reset scrolling and show cursor */
     bwprintf( COM2, "\x1b[2J\x1b[H\x1b[r\x1b[?25h");
 
@@ -18,10 +27,10 @@ void term_init() {
     bwprintf( COM2, "| +-------------------+ | 01: s | 02: s | 03: s | 04: s | 05: s | 06: s | |\r" );
     bwprintf( COM2, "| |      Sensor       | +-------+-------+-------+-------+-------+-------+ |\r" );
     bwprintf( COM2, "| +---------+---------+ | 07: s | 08: s | 09: s | 10: s | 11: s | 12: s | |\r" );
-    bwprintf( COM2, "| |   00    |   00    | +-------+-------+-------+-------+-------+-------+ |\r" );
-    bwprintf( COM2, "| |   00    |   00    | | 13: s | 14: s | 15: s | 16: s | 17: s | 18: s | |\r" );
-    bwprintf( COM2, "| |   00    |   00    | +-------+---+---+-------+-------+---+---+-------+ |\r" );
-    bwprintf( COM2, "| |   00    |   00    | | 0x99: s   | 0x9a: s   | 0x9b: s   | 0x9c: s   | |\r" );
+    bwprintf( COM2, "| |   000   |   000   | +-------+-------+-------+-------+-------+-------+ |\r" );
+    bwprintf( COM2, "| |   000   |   000   | | 13: s | 14: s | 15: s | 16: s | 17: s | 18: s | |\r" );
+    bwprintf( COM2, "| |   000   |   000   | +-------+---+---+-------+-------+---+---+-------+ |\r" );
+    bwprintf( COM2, "| |   000   |   000   | | 153:  s   | 154:  s   | 155:  s   | 156:  s   | |\r" );
     bwprintf( COM2, "| +-------------------+ +-----------+-----------+-----------+-----------+ |\r" );
     bwprintf( COM2, "| ExpressOS >                                                             |\r" );
     bwprintf( COM2, "|                                                                         |\r" );
@@ -45,56 +54,25 @@ void term_init() {
     bwprintf( COM2, "\x1b[13;15H" );
 }
 
-/*
- * Function to reset terminal
- */
+/* Function to reset terminal */
 void term_kill() {
     bwprintf( COM2, "\x1b[H\x1b[J\x1b[r" );
 }
 
-/*
- * Function to add a sensor
- */
-static int sensor_display[8] = {0};
-static int sensor_flag = 1;
-void sensor_init(int sensor) {
-    sensor_display[0] = 0;
-    sensor_display[1] = 0;
-    sensor_display[2] = 0;
-    sensor_display[3] = 0;
-    sensor_display[4] = 0;
-    sensor_display[5] = 0;
-    sensor_display[6] = 0;
-    sensor_display[7] = 0;
-    sensor_flag = 1;
-}
+/* Function to add a sensor */
 void sensor_print() {
     if (sensor_flag) {
-        char *padding[8];
-
-        int i;
-        for (i = 0; i < 8; i++) {
-            if (sensor_display[i] < 16) padding[i] = "0";
-            else padding[i] = "";
-        }
-
         io_printf( COM2, "\x1b[s" );
-        io_printf( COM2, "\x1b[8;7H%s%x\x1b[9;7H%s%x\x1b[10;7H%s%x\x1b[11;7H%s%x",
-                   padding[0], sensor_display[0], 
-                   padding[1], sensor_display[1], 
-                   padding[2], sensor_display[2], 
-                   padding[3], sensor_display[3] ); 
+        io_printf( COM2, "\x1b[8;7H%x\x1b[9;7H%x\x1b[10;7H%x\x1b[11;7H%x",
+                   sensor_display[0], sensor_display[1], sensor_display[2], sensor_display[3] ); 
         io_printf( COM2, "\x1b[8;17H%s%x\x1b[9;17H%s%x\x1b[10;17H%s%x\x1b[11;17H%s%x",
-                   padding[4], sensor_display[4],
-                   padding[5], sensor_display[5],
-                   padding[6], sensor_display[6],
-                   padding[7], sensor_display[7] ); 
+                   sensor_display[4], sensor_display[5], sensor_display[6], sensor_display[7] ); 
         io_printf( COM2, "\x1b[u" );
         sensor_flag = 0;
     }
 }
 void sensor_add(int sensor) {
-    if (sensor == sensor_display[0]) return;
+//    if (sensor == sensor_display[0]) return;
 
     int i;
     for (i = 7; i > 0; i--) {
@@ -104,16 +82,13 @@ void sensor_add(int sensor) {
     sensor_flag = 1;
 }
 
-/*
- * Function to add a input line
- */
-void input_print() {
-    io_printf( COM2, "\r| ExpressOS > \x1b[60C|\x1b[61D" );
+/* Function to add a input line */
+void input_print(int useTitleFlag) {
+    if (useTitleFlag) io_printf( COM2, "\r| ExpressOS > \x1b[60C|\x1b[61D" );
+    else io_printf( COM2, "\r|\x1b[73C|\x1b[70D");
 }
 
-/*
- * Function to change a switch display
- */
+/* Function to change a switch display */
 void switch_print(int switch_number, char switch_direction) {
     io_printf( COM2, "\x1b[s" );
     
@@ -189,9 +164,7 @@ void switch_print(int switch_number, char switch_direction) {
     io_printf( COM2, "\x1b[u" );
 }
 
-/*
- * Print time
- */
+/* Print time */
 void time_print(time_t elapsed_time) {
     /* Time Calculations */
     int milliseconds = (elapsed_time % 10);

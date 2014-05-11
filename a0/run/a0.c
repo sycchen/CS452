@@ -47,63 +47,6 @@ void errorCheck() {
 }
 
 /*
- * Sensor
- */
-#define SMASK1 1
-#define SMASK2 2
-#define SMASK3 4
-#define SMASK4 8
-#define SMASK5 16
-#define SMASK6 32
-#define SMASK7 64
-#define SMASK8 128
-
-static int sensor_id = 0;
-static int sensor_count = 0;
-static int sensor_temp = 0;
-static int count = 0;
-void checkSensors(char sensor_read) {
-    /* read sensor */    
-    if (sensor_read & SMASK8) {
-        sensor_add(sensor_id + sensor_count + 1);  
-    } if (sensor_read & SMASK7) {
-        sensor_add(sensor_id + sensor_count + 2 + sensor_temp);  
-    } if (sensor_read & SMASK6) {
-        sensor_add(sensor_id + sensor_count + 3 + sensor_temp);  
-    } if (sensor_read & SMASK5) {
-        sensor_add(sensor_id + sensor_count + 4 + sensor_temp);  
-    } if (sensor_read & SMASK4) {
-        sensor_add(sensor_id + sensor_count + 5 + sensor_temp);  
-    } if (sensor_read & SMASK3) {
-        sensor_add(sensor_id + sensor_count + 6 + sensor_temp);  
-    } if (sensor_read & SMASK2) {
-        sensor_add(sensor_id + sensor_count + 7 + sensor_temp);  
-    } if (sensor_read & SMASK1) {
-        sensor_add(sensor_id + sensor_count + 8 + sensor_temp);  
-    }
-
-    /* Which sensor is this */
-    if (sensor_count == 8) {
-        sensor_temp = 0;
-        sensor_count = 0;
-        sensor_id += 0x100;
-    } else {
-        sensor_temp = 6;
-        sensor_count = 8;
-    }
-    
-    if (sensor_id > 0xe00) {
-        sensor_id = 0xa00;
-    }
-
-    count++;
-    if (count == 10) {
-        count = 0;
-        io_putc(COM1, (char)133);
-    }
-}
-
-/*
  * Polling Loop
  */
 int main( int argc, const char* argv[] ) {
@@ -114,27 +57,16 @@ int main( int argc, const char* argv[] ) {
     io_initbuffer();
     io_setup( COM1, OFF, 2400 );
     io_setup( COM2, OFF, 115200 );
-    bwprintf( COM2, "System ExpressOS Starting.\r" );
+    bwprintf( COM2, "ExpressOS Starting.\r" );
     
-    /* Initialize Loop */
-    bwprintf( COM2, "Setting loop de loop.\r" );
-    system_initialize();
-   
-    /* Initialize Parser */
-    bwprintf( COM2, "Initialize Parser.\r" );
+    /* Initialize parcer.c */
     state_init();
 
-    /* Initialize Trains and switches and sensors*/
+    /* Initialize Trains and switches and sensor settings */
     bwprintf(COM2, "Initializing train and switches and sensors.\r");
     system_init();
-    sensor_id = 0xe00;
-    sensor_count = 8;
-    sensor_temp = 6;
-    count = 0;
 
-    /* Initialize Screen */
-    bwprintf( COM2, "I CAN SEE.\r" );
-    sensor_init();
+    /* Initialize Terminal Screen */
     term_init();
     
     /* Initialize Time and Timer */
@@ -151,9 +83,13 @@ int main( int argc, const char* argv[] ) {
         /* Check Timer */
         if (elapsed_time != timer_getTime()) {
             elapsed_time = timer_getTime();
+            
+            /* Update screen */
             time_print(elapsed_time);
             sensor_print();
-            reverse_checkQueue(elapsed_time);
+
+            /* Check to see if any trains need to reverse */
+            train_reverse_checkQueue(elapsed_time);
         }
         
         /* Read Check */

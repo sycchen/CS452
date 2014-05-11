@@ -4,7 +4,6 @@
     void term_init();
     void term_kill();
 
-    void sensor_init();
     void sensor_print();
     void sensor_add(int sensor);
     

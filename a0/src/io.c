@@ -1,23 +1,13 @@
-/*
- *
- * File containing input and output functions
- *
- */
-
 #include <bwio.h>
 #include <ts7200.h>
 #include <io.h>
 #include <buffer.h>
 
-/*
- * Buffers
- */
+/* Buffers */
 static buffer COM1_buf = {0,0,{0}};
 static buffer COM2_buf = {0,0,{0}};
 
-/*
- * Initialize
- */
+/* Initialize */
 int io_setup( int channel, int state, int speed ) {
     int *line, *high, *low, buf;
     switch( channel ) {
@@ -36,6 +26,7 @@ int io_setup( int channel, int state, int speed ) {
             break;
     }
     
+    /* Set speed */
     switch( speed ) {
         case 115200:
             *high = 0x0;
@@ -49,41 +40,35 @@ int io_setup( int channel, int state, int speed ) {
             return -1;
     }
     
+    /* Set FIFO */
     buf = *line;
     buf = state ? buf | FEN_MASK : buf & ~FEN_MASK;
     *line = buf;
     return 0;
 }
-
 void io_initbuffer() {
     buffer_init(&COM1_buf);
     buffer_init(&COM2_buf);
 }
 
-/*
- * Input
- */
+/* Input */
 int io_canGet( int channel ) {
     int *flags;
 
     switch( channel ) {
         case COM1:
             flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
-            return (*flags & RXFF_MASK );
             break;
         case COM2:
             flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
-            return (*flags & RXFF_MASK );                       
             break;
         default:
             return -1;
             break;
     }
-    
-    /* Should never get here */
-    return -1;
-}
 
+    return (*flags & RXFF_MASK );
+}
 int io_getc( int channel ) {
     int *data;
 
@@ -102,9 +87,7 @@ int io_getc( int channel ) {
     return *data;
 }
 
-/*
- * Output
- */
+/* Output */
 int io_canPut( int channel ) {
     int *flags;
 
@@ -112,32 +95,30 @@ int io_canPut( int channel ) {
         case COM1:
             flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
             return (!(*flags & TXFF_MASK) && (*flags & CTS_MASK) && !(*flags & TXBUSY_MASK));
-            break;
         case COM2:
             flags = (int *)( UART2_BASE + UART_FLAG_OFFSET );
             return (!(*flags & TXFF_MASK));
-            break;
         default:
             return -1;
             break;
     }
 
+    /* Should not get here */
     return -1;
 }
-
 int io_putc_from_buf( int channel ) {
     int *data;
     char c;
 
     switch( channel ) {
         case COM1:
+            if (buffer_isEmpty(&COM1_buf)) return;
             data = (int *)( UART1_BASE + UART_DATA_OFFSET );
-            if (buffer_check(&COM1_buf)) return;
             c = buffer_get(&COM1_buf);
             break;
         case COM2:
+            if (buffer_isEmpty(&COM2_buf)) return;
             data = (int *)( UART2_BASE + UART_DATA_OFFSET );
-            if (buffer_check(&COM2_buf)) return;
             c = buffer_get(&COM2_buf);
             break;
         default:
@@ -148,7 +129,6 @@ int io_putc_from_buf( int channel ) {
     *data = c;
     return 0;
 }
-
 int io_putc( int channel, char c ) {
     switch( channel ) {
         case COM1:
@@ -164,7 +144,6 @@ int io_putc( int channel, char c ) {
 
     return 0;
 }
-
 void io_putw( int channel, int n, char fc, char *bf ) {
     char ch;
     char *p = bf;
@@ -173,7 +152,6 @@ void io_putw( int channel, int n, char fc, char *bf ) {
     while( n-- > 0 ) io_putc( channel, fc );
     while( ( ch = *bf++ ) ) io_putc( channel, ch );
 }
-
 void io_format ( int channel, char *fmt, va_list va ) {
     char bf[12];
     char ch, lz;
@@ -228,7 +206,6 @@ void io_format ( int channel, char *fmt, va_list va ) {
         }
     }
 }
-
 void io_printf( int channel, char *fmt, ... ) {
     va_list va;
 
