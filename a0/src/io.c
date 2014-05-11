@@ -132,20 +132,20 @@ int io_putc_from_buf( int channel ) {
     switch( channel ) {
         case COM1:
             data = (int *)( UART1_BASE + UART_DATA_OFFSET );
+            if (buffer_check(&COM1_buf)) return;
             c = buffer_get(&COM1_buf);
             break;
         case COM2:
             data = (int *)( UART2_BASE + UART_DATA_OFFSET );
+            if (buffer_check(&COM2_buf)) return;
             c = buffer_get(&COM2_buf);
             break;
         default:
             return -1;
             break;
     }
-
-    if (c != (char)0) {
-	*data = c;
-    }
+    
+    *data = c;
     return 0;
 }
 

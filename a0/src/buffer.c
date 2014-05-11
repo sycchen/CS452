@@ -22,16 +22,23 @@ void buffer_put(buffer *b, char c) {
  
     b->put_index++;
     if (b->put_index == MAX_BUFFER_SIZE) b->put_index = 0;
+
+    if (b->put_index == b->get_index) bwprintf(COM2, "BUFFER FULL \n");
+}
+
+/*
+ * Buffer Check
+ */
+int buffer_check(buffer *b) {
+    if (b->get_index == b->put_index) return 1;
+
+    return 0;
 }
 
 /*
  * Get a character from the buffer
  */
 char buffer_get(buffer *b) {
-    if (b->get_index == b->put_index) {
-        return (char)0;
-    }
-
     char c = b->buf[b->get_index];
 
     b->get_index++;

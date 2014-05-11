@@ -15,6 +15,8 @@ void buffer_init(buffer *b);
 
 void buffer_put(buffer *b, char c);
 
+int buffer_check(buffer *b);
+
 char buffer_get(buffer *b);
 
 #endif

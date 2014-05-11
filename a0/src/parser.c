@@ -404,7 +404,7 @@ static int staten(char in, int *arg1) {
 }
 
 /* RV_#_ */
-static int statej(char in, int arg1) {
+static int stateo(char in, int arg1) {
     switch( in ) {
         case ' ':
             return 24;
