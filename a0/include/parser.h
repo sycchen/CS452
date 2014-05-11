@@ -10,6 +10,7 @@
  *                    -(t)>  state6  -(r)>  state7  -(_)>  state8  -(#)>  state9  -(_)>  statea  -(#)>  stateb  -(_)>  statec
  *                    -(s)>  stated  -(w)>  statee  -(_)>  statef  -(#)>  stateg  -(_)>  stateh  -(s)>  statei
  *                                                                                               -(c)>  statej
+ *                    -(r)>  statek  -(v)>  statel  -(_)>  statem  -(#)>  staten  -(_)>  stateo
  *
  *      failState : All States can go to fail state?
  */

@@ -153,6 +153,7 @@ int main( int argc, const char* argv[] ) {
             elapsed_time = timer_getTime();
             time_print(elapsed_time);
             sensor_print();
+            reverse_checkQueue(elapsed_time);
         }
         
         /* Read Check */

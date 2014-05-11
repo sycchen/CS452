@@ -29,6 +29,9 @@ static int initialState(char in) {
         case 'S':
         case 's':
             return 13;
+        case 'R':
+        case 'r':
+            return 20;
         case ' ':
             return 0;
         default:
@@ -332,6 +335,88 @@ static int statej(char in, int arg1) {
     }
 }
 
+/* R */
+static int statek(char in) {
+    switch( in ) {
+        case 'V':
+        case 'v':
+            return 21;
+        default:
+            return -1;
+    }
+}
+
+/* RV */
+static int statel(char in) {
+    switch( in ) {
+        case ' ':
+            return 22;
+        default:
+            return -1;
+    }   
+}
+
+/* RV_ */
+static int statem(char in, int *arg1) {
+    switch( in ) {
+        case ' ':
+            return 22;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+            *arg1 = bwa2d( in );
+            return 23;
+        default:
+            return -1;
+    }       
+}
+
+/* RV_# */
+static int staten(char in, int *arg1) {
+    switch( in ) {
+        case ' ':
+            return 24;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+            *arg1 = ( *arg1 * 10 ) + bwa2d( in );
+            return 23;
+        case '\r':
+            reverse(*arg1);
+            return 0;
+        default:
+            return -1;
+    }
+}
+
+/* RV_#_ */
+static int statej(char in, int arg1) {
+    switch( in ) {
+        case ' ':
+            return 24;
+        case '\r':
+            reverse(arg1);
+            return 0;
+        default:
+            return -1;
+    }
+}
+
+
 /* State and initializer */
 static state cur_state;
 void state_init() {
@@ -408,6 +493,21 @@ state runState(char in) {
             break;
         case 19:
             cur_state = statej(in, arg1);
+            break;
+        case 20:
+            cur_state = statek(in);
+            break;
+        case 21:
+            cur_state = statel(in);
+            break;
+        case 22:
+            cur_state = statem(in, &arg1);
+            break;
+        case 23:
+            cur_state = staten(in, &arg1);
+            break;
+        case 24:
+            cur_state = stateo(in, arg1);
             break;
         default:
             cur_state = failState(in);
