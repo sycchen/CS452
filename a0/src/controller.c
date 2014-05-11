@@ -7,6 +7,9 @@
 
 /* Initialize all */
 void system_init() {
+    /* Turn System On */
+    bwputc( COM1, (char)0x60 );
+    
     /* Initialize Switches */
     int i;
     for (i = 1; i <= 18; i++) {
@@ -60,7 +63,7 @@ void switch_direction(int switch_number, char switch_direction) {
     io_putc( COM1, (char)switch_number );
     io_putc( COM1, (char)0x20 );
 
-    switch_print( switch_number, char switch_direction );
+    switch_print( switch_number, switch_direction );
 }
 
 /* Status used polling loop */

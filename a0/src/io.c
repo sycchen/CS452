@@ -12,8 +12,8 @@
 /*
  * Buffers
  */
-static buffer COM1_buf;
-static buffer COM2_buf;
+static buffer COM1_buf = {0,0,{0}};
+static buffer COM2_buf = {0,0,{0}};
 
 /*
  * Initialize

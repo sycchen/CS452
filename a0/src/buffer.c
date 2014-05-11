@@ -7,6 +7,11 @@
 void buffer_init(buffer *b) {
     b->put_index = 0;
     b->get_index = 0;
+    
+    int i;
+    for (i = 0; i < MAX_BUFFER_SIZE; i++) {
+        b->buf[i] = (char)0;
+    }
 }
 
 /*

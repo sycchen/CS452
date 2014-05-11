@@ -94,9 +94,11 @@ void sensor_print() {
     }
 }
 void sensor_add(int sensor) {
+    if (sensor == sensor_display[0]) return;
+
     int i;
-    for (i = 0; i < 7; i++) {
-       sensor_display[i+1] = sensor_display[i]; 
+    for (i = 7; i > 0; i--) {
+       sensor_display[i] = sensor_display[i-1]; 
     }
     sensor_display[0] = sensor;
     sensor_flag = 1;
@@ -135,52 +137,52 @@ void switch_print(int switch_number, char switch_direction) {
             io_printf( COM2, "\x1b[5;71H" );
             break;
         case 7:
-            io_printf( COM2, "\x1b[6;31H" );
-            break;
-        case 8:
-            io_printf( COM2, "\x1b[6;39H" );
-            break;
-        case 9:
-            io_printf( COM2, "\x1b[6;47H" );
-            break;
-        case 10:
-            io_printf( COM2, "\x1b[6;55H" );
-            break;
-        case 11:
-            io_printf( COM2, "\x1b[6;63H" );
-            break;
-        case 12:
-            io_printf( COM2, "\x1b[6;71H" );
-            break;
-        case 13:
             io_printf( COM2, "\x1b[7;31H" );
             break;
-        case 14:
+        case 8:
             io_printf( COM2, "\x1b[7;39H" );
             break;
-        case 15:
+        case 9:
             io_printf( COM2, "\x1b[7;47H" );
             break;
-        case 16:
+        case 10:
             io_printf( COM2, "\x1b[7;55H" );
             break;
-        case 17:
+        case 11:
             io_printf( COM2, "\x1b[7;63H" );
             break;
-        case 18:
+        case 12:
             io_printf( COM2, "\x1b[7;71H" );
             break;
+        case 13:
+            io_printf( COM2, "\x1b[9;31H" );
+            break;
+        case 14:
+            io_printf( COM2, "\x1b[9;39H" );
+            break;
+        case 15:
+            io_printf( COM2, "\x1b[9;47H" );
+            break;
+        case 16:
+            io_printf( COM2, "\x1b[9;55H" );
+            break;
+        case 17:
+            io_printf( COM2, "\x1b[9;63H" );
+            break;
+        case 18:
+            io_printf( COM2, "\x1b[9;71H" );
+            break;
         case 153:
-            io_printf( COM2, "\x1b[8;33H" );
+            io_printf( COM2, "\x1b[11;33H" );
             break;
         case 154:
-            io_printf( COM2, "\x1b[8;45H" );
+            io_printf( COM2, "\x1b[11;45H" );
             break;
         case 155:
-            io_printf( COM2, "\x1b[8;57H" );
+            io_printf( COM2, "\x1b[11;57H" );
             break;
         case 156:
-            io_printf( COM2, "\x1b[8;69H" );
+            io_printf( COM2, "\x1b[11;69H" );
             break;
     }
     io_putc( COM2, switch_direction );
@@ -188,7 +190,7 @@ void switch_print(int switch_number, char switch_direction) {
 }
 
 /*
- *
+ * Print time
  */
 void time_print(time_t elapsed_time) {
     /* Time Calculations */
