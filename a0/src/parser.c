@@ -341,7 +341,8 @@ void state_init() {
 /* Run's the state giving it a char.
  * Will return the next state */
 state runState(char in) {
-    static int arg1, arg2;
+    static int arg1 = 0;
+    static int arg2 = 0;
 
     if (in == '\x1b') return 0;
    

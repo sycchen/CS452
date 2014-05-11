@@ -4,8 +4,7 @@
 /*
  * Initialize
  */
-int io_setfifo( int channel, int state );
-int io_setspeed( int channel, int speed );
+int io_setup( int channel, int state, int speed );
 void io_initbuffer();
 
 /*

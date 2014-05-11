@@ -55,8 +55,8 @@ void term_kill() {
 /*
  * Function to add a sensor
  */
-static int sensor_display[8];
-static int sensor_flag;
+static int sensor_display[8] = {0};
+static int sensor_flag = 1;
 void sensor_init(int sensor) {
     sensor_display[0] = 0;
     sensor_display[1] = 0;

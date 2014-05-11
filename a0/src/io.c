@@ -18,52 +18,41 @@ static buffer COM2_buf = {0,0,{0}};
 /*
  * Initialize
  */
-int io_setfifo( int channel, int state ) {
-    int *line, buf;
+int io_setup( int channel, int state, int speed ) {
+    int *line, *high, *low, buf;
     switch( channel ) {
         case COM1:
+            low = (int *)( UART1_BASE + UART_LCRL_OFFSET );
+            high = (int *)( UART1_BASE + UART_LCRM_OFFSET );
             line = (int *)( UART1_BASE + UART_LCRH_OFFSET );
             break;
         case COM2:
+            low = (int *)( UART2_BASE + UART_LCRL_OFFSET );
+            high = (int *)( UART2_BASE + UART_LCRM_OFFSET );
             line = (int *)( UART2_BASE + UART_LCRH_OFFSET );
             break;
         default:
             return -1;
             break;
     }
-    buf = *line;
-    buf = state ? buf | FEN_MASK : buf & ~FEN_MASK;
-    *line = buf;
-    return 0;
-}
-
-int io_setspeed( int channel, int speed ) {
-    int *high, *low;
-    switch( channel ) {
-        case COM1:
-            high = (int *)( UART1_BASE + UART_LCRM_OFFSET );
-            low = (int *)( UART1_BASE + UART_LCRL_OFFSET );
-            break;
-        case COM2:
-            high = (int *)( UART2_BASE + UART_LCRM_OFFSET );
-            low = (int *)( UART2_BASE + UART_LCRL_OFFSET );
-            break;
-        default:
-            return -1;
-            break;
-    }
+    
     switch( speed ) {
         case 115200:
             *high = 0x0;
             *low = 0x3;
-            return 0;
+            break;
         case 2400:
             *high = 0x0;
             *low = 0xbf;
-            return 0;
+            break;
         default:
             return -1;
     }
+    
+    buf = *line;
+    buf = state ? buf | FEN_MASK : buf & ~FEN_MASK;
+    *line = buf;
+    return 0;
 }
 
 void io_initbuffer() {

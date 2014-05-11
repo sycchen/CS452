@@ -11,33 +11,39 @@
 /*
  * Error Check
  */
-void errorCheck() {
-    int *error = (int *)( UART1_BASE + UART_RSR_OFFSET );
-    if (*error & OE_MASK) {
-         bwprintf(COM2, "Overrun Error\r");
-    system_quit();
-    bwgetc(COM2);
-    }
-    if (*error & BE_MASK) {
-         bwprintf(COM2, "Break Error\r");
-    system_quit();
-    bwgetc(COM2);
-    }
-    if (*error & PE_MASK) {
-         bwprintf(COM2, "Parity Error\r");
-    system_quit();
-    bwgetc(COM2);
-    }
-    if (*error & FE_MASK) {
-         bwprintf(COM2, "Framing Error\r");
-    system_quit();
-    bwgetc(COM2);
-    }
-}
 void errorReset() {
     int *error = (int *)( UART1_BASE + UART_RSR_OFFSET );
     *error = 0;
-    system_initialize();
+}
+void errorCheck() {
+    int *error = (int *)( UART1_BASE + UART_RSR_OFFSET );
+    int isError = 0;
+
+    if (*error & OE_MASK) {
+        bwprintf(COM2, "Overrun Error\r");
+        system_quit();
+        isError = 1;
+    }
+    if (*error & BE_MASK) {
+        bwprintf(COM2, "Break Error\r");
+        system_quit();
+        isError = 1;
+    }
+    if (*error & PE_MASK) {
+        bwprintf(COM2, "Parity Error\r");
+        system_quit();
+        isError = 1;
+    }
+    if (*error & FE_MASK) {
+        bwprintf(COM2, "Framing Error\r");
+        system_quit();
+        isError = 1;
+    }
+    
+    if (isError == 1) {
+        bwgetc(COM2);
+        errorReset();
+    }
 }
 
 /*
@@ -101,13 +107,13 @@ void checkSensors(char sensor_read) {
  * Polling Loop
  */
 int main( int argc, const char* argv[] ) {
+    errorReset();
+
     /* Initialize io */
     char data_read, sensor_read;
     io_initbuffer();
-    io_setfifo( COM1, OFF );
-    io_setspeed( COM1, 2400 );
-    io_setfifo( COM2, OFF );
-    io_setspeed( COM2, 115200 );
+    io_setup( COM1, OFF, 2400 );
+    io_setup( COM2, OFF, 115200 );
     bwprintf( COM2, "System ExpressOS Starting.\r" );
     
     /* Initialize Loop */
@@ -136,8 +142,7 @@ int main( int argc, const char* argv[] ) {
     timer_init();
 
     /* Starting Sensors */
-    bwputc(COM1, (char)192);
-    errorReset();
+    io_putc(COM1, (char)192);
     io_putc(COM1, (char)133);
     errorCheck();
 

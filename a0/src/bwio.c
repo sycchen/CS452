@@ -69,7 +69,7 @@ int bwputc( int channel, char c ) {
 	case COM1:
 		flags = (int *)( UART1_BASE + UART_FLAG_OFFSET );
 		data = (int *)( UART1_BASE + UART_DATA_OFFSET );
-        	while( ( *flags & TXFF_MASK ) || !(*flags & CTS_MASK) || (*flags & TXBUSY_MASK) ) ;
+        	while( ( *flags & TXFF_MASK ) | !(*flags & CTS_MASK) | (*flags & TXBUSY_MASK) ) ;
 	        *data = c;
 		break;
 	case COM2:

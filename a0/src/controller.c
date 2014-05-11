@@ -4,7 +4,6 @@
 #include <controller.h>
 #include <terminal.h>
 
-
 /* Initialize all */
 void system_init() {
     /* Turn System On */
@@ -67,7 +66,7 @@ void switch_direction(int switch_number, char switch_direction) {
 }
 
 /* Status used polling loop */
-static int status;
+static int status = 0;
 
 /* System Initialize Status */
 void system_initialize() {
