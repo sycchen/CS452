@@ -12,7 +12,7 @@ static int failState(char in) {
     switch( in ) {
         case '\r':
             input_print(0);
-            io_printf(COM2, "Invalid Command")
+            io_printf(COM2, "Invalid Command");
             return 0;
         default:
             return -1;
@@ -433,7 +433,7 @@ state runState(char in) {
     static int arg2 = 0;
 
     if (in == '\x1b') return cur_state;
-    else if (in == char(0x8)) return cur_state;
+    else if (in == (char)0x8) return cur_state;
    
     switch(cur_state) {
         case 0:

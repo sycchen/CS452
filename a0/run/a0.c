@@ -73,6 +73,12 @@ int main( int argc, const char* argv[] ) {
     time_t elapsed_time = 0;
     timer_init();
 
+    /* Do a couple reads to clear any extra */
+//    int i;
+//    for (i = 0; i < 10; i++) {
+//        if (io_canGet( COM1 ) > 0) io_getc( COM1 );
+//    }
+
     /* Starting Sensors */
     io_putc(COM1, (char)192);
     io_putc(COM1, (char)133);
@@ -95,7 +101,7 @@ int main( int argc, const char* argv[] ) {
         /* Read Check */
         if (io_canGet( COM1 ) > 0) {
             sensor_read = (char)io_getc( COM1 );
-            checkSensors(sensor_read);
+            sensor_check(sensor_read);
         }
         if (io_canGet( COM2 ) > 0) {
             data_read = (char)io_getc( COM2 );

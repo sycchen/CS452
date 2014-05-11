@@ -28,15 +28,13 @@ void system_init() {
 
     /* Initialize sensor variables */
     sensor_id = 0xe00;
-    sensor_count = 8;
-    sensor_temp = 6;
+    sensor_count = 1;
     count = 0;
 
     /* Turn System On */
     bwputc( COM1, (char)0x60 );
     
     /* Initialize Switches */
-    int i;
     for (i = 1; i <= 18; i++) {
         bwputc( COM1, (char)0x21 );
         bwputc( COM1, (char)i );
@@ -121,7 +119,7 @@ void switch_direction(int switch_number, char switch_direction) {
 }
 
 /* Sensor */
-void checkSensors(char sensor_read) {
+void sensor_check(char sensor_read) {
     /* read sensor */    
     if (sensor_read & SMASK8) {
         sensor_add(sensor_id + (sensor_count * 8) + 1);  
@@ -146,7 +144,7 @@ void checkSensors(char sensor_read) {
         sensor_count = 0;
         sensor_id += 0x100;
     } else {
-        sensor_count == 1;
+        sensor_count = 1;
     }
     
     if (sensor_id > 0xe00) {

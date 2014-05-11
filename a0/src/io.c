@@ -112,12 +112,12 @@ int io_putc_from_buf( int channel ) {
 
     switch( channel ) {
         case COM1:
-            if (buffer_isEmpty(&COM1_buf)) return;
+            if (buffer_isEmpty(&COM1_buf)) return 0;
             data = (int *)( UART1_BASE + UART_DATA_OFFSET );
             c = buffer_get(&COM1_buf);
             break;
         case COM2:
-            if (buffer_isEmpty(&COM2_buf)) return;
+            if (buffer_isEmpty(&COM2_buf)) return 0;
             data = (int *)( UART2_BASE + UART_DATA_OFFSET );
             c = buffer_get(&COM2_buf);
             break;
