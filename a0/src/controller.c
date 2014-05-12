@@ -10,7 +10,7 @@ static int sensor_id = 0;
 static int sensor_count = 0;
 static int count = 0;
 
-static int reverse_time[MAX_REVERSE_QUEUE] = { 0 };
+static time_t reverse_time[MAX_REVERSE_QUEUE] = { 0 };
 static int reverse_train[MAX_REVERSE_QUEUE] = { 0 };
 static int train_speed_array[52] = { 0 };
 
@@ -38,20 +38,20 @@ void system_init() {
     for (i = 0; i < 52; i++) {
         train_speed_array[i] = 0;
     }
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)43 );
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)45 );
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)47 );
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)48 );
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)49 );
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)50 );
-    io_putc( COM1, (char)0 );
-    io_putc( COM1, (char)51 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)43 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)45 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)47 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)48 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)49 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)50 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)51 );
 
     /* Initialize Switches */
     for (i = 1; i <= 18; i++) {
@@ -175,7 +175,7 @@ int sensor_check(char sensor_read) {
         sensor_add(sensor_id + (sensor_count * 14) + 8);  
     }
 
-    /* Which sensor is this */
+    /* What is next sensor? */
     if (sensor_count == 1) {
         sensor_count = 0;
         sensor_id += 0x100;

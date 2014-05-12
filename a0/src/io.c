@@ -106,6 +106,21 @@ int io_canPut( int channel ) {
     /* Should not get here */
     return -1;
 }
+int io_putc( int channel, char c ) {
+    switch( channel ) {
+        case COM1:
+            buffer_put(&COM1_buf, c);
+            break;
+        case COM2:
+            buffer_put(&COM2_buf, c);
+            break;
+        default:
+            return -1;
+            break;
+    }
+
+    return 0;
+}
 char io_putc_from_buf( int channel ) {
     int *data;
     char c;
@@ -128,21 +143,6 @@ char io_putc_from_buf( int channel ) {
     
     *data = c;
     return c;
-}
-int io_putc( int channel, char c ) {
-    switch( channel ) {
-        case COM1:
-            buffer_put(&COM1_buf, c);
-            break;
-        case COM2:
-            buffer_put(&COM2_buf, c);
-            break;
-        default:
-            return -1;
-            break;
-    }
-
-    return 0;
 }
 void io_putw( int channel, int n, char fc, char *bf ) {
     char ch;

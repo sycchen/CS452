@@ -172,7 +172,7 @@ void time_print(time_t elapsed_time) {
     int minutes = (elapsed_time % 3600)/600; 
     int hours = elapsed_time/36000;
 
-    /* Print */
+    /* Pad */
     char *padding_seconds = "";
     if (seconds < 10) {
         padding_seconds = "0";
@@ -186,6 +186,7 @@ void time_print(time_t elapsed_time) {
         padding_hours = "0";
     }
 
+    /* Print */
     io_printf( COM2, "\x1b[s\x1b[3;12H%s%u:%s%u:%s%u:%u\x1b[u", 
                padding_hours, hours, padding_minutes, minutes, 
                padding_seconds, seconds, milliseconds);

@@ -18,15 +18,28 @@
 /* State */
 typedef int state;
 
-// struct state {
-//     /* Function to use to get to next struct */
-//     int fnid;
+/* State to include backspace in future */
+//struct state {
+//    /* Function to use to get to next struct */
+//    int fnid;
+//
+//    /* Pointer to the last state for backspacing */
+//    struct state *last_state;   
+//};
 
-//     /* Pointer to the last state for backspacing */
-//     struct state *last_state;   
-// };
-
+/*
+ * state_init: void
+ * 
+ * Initializes the class variables.
+ */
 void state_init();
+
+/*
+ * runState: state
+ *     char in - The character to parse.
+ * 
+ * Travels to the next state using input.
+ */
 state runState(char in);
 
 #endif
