@@ -9,14 +9,7 @@ static state cur_state;
 
 /* Fail state */
 static int failState(char in) {
-    switch( in ) {
-        case '\r':
-            input_print(0);
-            io_printf(COM2, "Invalid Command");
-            return 0;
-        default:
-            return -1;
-    }
+    return -1;
 }
 
 /* The starting state */
@@ -519,6 +512,10 @@ state runState(char in) {
     }
 
     if (in == '\r') {
+        if (cur_state == -1) {
+            input_print(0);
+            io_printf(COM2, "Invalid Command");
+        }
         input_print(1);
         cur_state = 0; 
     } else {

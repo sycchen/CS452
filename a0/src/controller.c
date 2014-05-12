@@ -4,7 +4,6 @@
 #include <controller.h>
 #include <terminal.h>
 
-
 /* Variables global to file */
 static int status = 0;
 static int sensor_id = 0;
@@ -13,6 +12,7 @@ static int count = 0;
 
 static int reverse_time[MAX_REVERSE_QUEUE] = { 0 };
 static int reverse_train[MAX_REVERSE_QUEUE] = { 0 };
+static int train_speed_array[52] = { 0 };
 
 /* Initialize all */
 void system_init() {
@@ -27,13 +27,32 @@ void system_init() {
     }
 
     /* Initialize sensor variables */
-    sensor_id = 0xe00;
-    sensor_count = 1;
+    sensor_id = 0xa00;
+    sensor_count = 0;
     count = 0;
 
     /* Turn System On */
     bwputc( COM1, (char)0x60 );
     
+    /* Initialize Trains */
+    for (i = 0; i < 52; i++) {
+        train_speed_array[i] = 0;
+    }
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)43 );
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)45 );
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)47 );
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)48 );
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)49 );
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)50 );
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)51 );
+
     /* Initialize Switches */
     for (i = 1; i <= 18; i++) {
         bwputc( COM1, (char)0x21 );
@@ -67,6 +86,20 @@ void system_off() {
 }
 void system_quit() {
     status = 0;
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)43 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)45 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)47 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)48 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)49 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)50 );
+    bwputc( COM1, (char)0 );
+    bwputc( COM1, (char)51 );
 }
 int system_status() {
     return status;
@@ -76,9 +109,11 @@ int system_status() {
 void train_speed(int train_number, int train_speed) {
     io_putc( COM1, (char)train_speed );
     io_putc( COM1, (char)train_number );
+    if (train_speed < 15 && train_speed >= 0 && train_number < 52 && train_number >= 0) train_speed_array[train_number] = train_speed;
 }
 void train_reverse(int train_number) {
-    train_speed(train_number, 0);
+    io_putc( COM1, (char)0 );
+    io_putc( COM1, (char)train_number );
 
     /* Throw in queue */
     int i;
@@ -97,6 +132,7 @@ void train_reverse_checkQueue(int cur_time) {
             reverse_time[i] = cur_time;
         } else if ((reverse_time[i] + 15) < cur_time) {
             train_speed(reverse_train[i], 15);
+            train_speed(reverse_train[i], train_speed_array[reverse_train[i]]);
             reverse_time[i] = 0;
             reverse_train[i] = 0;
         }
@@ -119,7 +155,7 @@ void switch_direction(int switch_number, char switch_direction) {
 }
 
 /* Sensor */
-void sensor_check(char sensor_read) {
+int sensor_check(char sensor_read) {
     /* read sensor */    
     if (sensor_read & SMASK8) {
         sensor_add(sensor_id + (sensor_count * 8) + 1);  
@@ -156,6 +192,8 @@ void sensor_check(char sensor_read) {
     if (count == 10) {
         count = 0;
         io_putc(COM1, (char)133);
+        return 1;
     }
+    return 0;
 }
 

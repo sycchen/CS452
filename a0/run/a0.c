@@ -41,7 +41,7 @@ void errorCheck() {
     }
     
     if (isError == 1) {
-        bwgetc(COM2);
+//        bwgetc(COM2);
         errorReset();
     }
 }
@@ -59,7 +59,7 @@ int main( int argc, const char* argv[] ) {
     io_setup( COM2, OFF, 115200 );
     bwprintf( COM2, "ExpressOS Starting.\r" );
     
-    /* Initialize parcer.c */
+    /* Initialize parcer */
     state_init();
 
     /* Initialize Trains and switches and sensor settings */
@@ -73,19 +73,30 @@ int main( int argc, const char* argv[] ) {
     time_t elapsed_time = 0;
     timer_init();
 
-    /* Do a couple reads to clear any extra */
-//    int i;
-//    for (i = 0; i < 10; i++) {
-//        if (io_canGet( COM1 ) > 0) io_getc( COM1 );
-//    }
-
     /* Starting Sensors */
+    if (io_canGet( COM1 ) > 0) io_getc( COM1 );
     io_putc(COM1, (char)192);
     io_putc(COM1, (char)133);
     errorCheck();
 
     /* Run instructions (Polling Loop) */
+    //int test = 0; //1500-1600 cycles through polling loop
+    //time_t test = 0; //9000-10000 clock cycles through polling loop
+    //time_t test1 = 0;
+    //time_t test2 = 0; 5ms
+    //time_t test3 = 0;
+    //time_t test4 = 0;
+    //time_t test5 = 0; < 1ms
     while (system_status()) {
+        /* Test */
+        //test++;        
+        //test1 = timer_getMilli();
+        //if (test2 < test1 - test3) test2 = test1 - test3;
+        //test3 = test1;            
+        //test4++;
+        //test5 += test1 - test3;
+
+
         /* Check Timer */
         if (elapsed_time != timer_getTime()) {
             elapsed_time = timer_getTime();
@@ -96,18 +107,26 @@ int main( int argc, const char* argv[] ) {
 
             /* Check to see if any trains need to reverse */
             train_reverse_checkQueue(elapsed_time);
+
+            /* Test */
+            //io_printf(COM2, "\x1b[s\x1b[H%d::%d\x1b[u", test2, test5/test4);
+            //io_printf(COM2, "\x1b[s\x1b[H%d\x1b[u", test);
+            //test = 0;
         }
         
         /* Read Check */
         if (io_canGet( COM1 ) > 0) {
             sensor_read = (char)io_getc( COM1 );
-            sensor_check(sensor_read);
+            if (sensor_check(sensor_read)) {
+                //io_printf(COM2, "\x1b[s\x1b[H%d\x1b[u", test);
+                //test = 0;
+            }
         }
         if (io_canGet( COM2 ) > 0) {
             data_read = (char)io_getc( COM2 );
             runState(data_read);
         }
-        
+ 
         /* Write Check */
         if (io_canPut( COM1 ) > 0) {
             io_putc_from_buf( COM1 );

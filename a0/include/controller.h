@@ -21,7 +21,7 @@ void train_speed(int train_number, int train_speed);
 void switch_direction(int switch_number, char switch_direction);
 void train_reverse(int train_number);
 void train_reverse_checkQueue(int cur_time);
-void sensor_check(char sensor_read);
+int sensor_check(char sensor_read);
 
 #endif
 

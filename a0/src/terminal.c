@@ -65,7 +65,7 @@ void sensor_print() {
         io_printf( COM2, "\x1b[s" );
         io_printf( COM2, "\x1b[8;7H%x\x1b[9;7H%x\x1b[10;7H%x\x1b[11;7H%x",
                    sensor_display[0], sensor_display[1], sensor_display[2], sensor_display[3] ); 
-        io_printf( COM2, "\x1b[8;17H%s%x\x1b[9;17H%s%x\x1b[10;17H%s%x\x1b[11;17H%s%x",
+        io_printf( COM2, "\x1b[8;17H%x\x1b[9;17H%x\x1b[10;17H%x\x1b[11;17H%x",
                    sensor_display[4], sensor_display[5], sensor_display[6], sensor_display[7] ); 
         io_printf( COM2, "\x1b[u" );
         sensor_flag = 0;

@@ -16,6 +16,7 @@
      * Reads from the Timer
      */
     time_t timer_getTime();
+    time_t timer_getMilli();
 
 #endif
 

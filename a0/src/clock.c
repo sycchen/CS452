@@ -17,4 +17,7 @@ time_t timer_getTime() {
     time_t timer = *((time_t *)( TIMER3_BASE + VAL_OFFSET ));
     return (((time_t)TIMER_CLICKS_IN_DAY - timer)/200);
 }
-
+time_t timer_getMilli() {
+    time_t timer = *((time_t *)( TIMER3_BASE + VAL_OFFSET ));
+    return (((time_t)TIMER_CLICKS_IN_DAY - timer)/2);
+}
