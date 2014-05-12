@@ -17,7 +17,7 @@ int io_getc( int channel );
  * Output
  */
 int io_canPut( int channel );
-int io_putc_from_buf( int channel );
+char io_putc_from_buf( int channel );
 int io_putc( int channel, char c );
 void io_putw( int channel, int n, char fc, char *bf );
 void io_printf( int channel, char *fmt, ... );

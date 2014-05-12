@@ -16,33 +16,35 @@ void errorReset() {
     *error = 0;
 }
 void errorCheck() {
-    int *error = (int *)( UART1_BASE + UART_RSR_OFFSET );
-    int isError = 0;
+    if (system_status()) {
+        int *error = (int *)( UART1_BASE + UART_RSR_OFFSET );
+        int isError = 0;
 
-    if (*error & OE_MASK) {
-        bwprintf(COM2, "Overrun Error\r");
-        system_quit();
-        isError = 1;
-    }
-    if (*error & BE_MASK) {
-        bwprintf(COM2, "Break Error\r");
-        system_quit();
-        isError = 1;
-    }
-    if (*error & PE_MASK) {
-        bwprintf(COM2, "Parity Error\r");
-        system_quit();
-        isError = 1;
-    }
-    if (*error & FE_MASK) {
-        bwprintf(COM2, "Framing Error\r");
-        system_quit();
-        isError = 1;
-    }
+        if (*error & OE_MASK) {
+            bwprintf(COM2, "Overrun Error\r");
+            system_quit();
+            isError = 1;
+        }
+        if (*error & BE_MASK) {
+            bwprintf(COM2, "Break Error\r");
+            system_quit();
+            isError = 1;
+        }
+        if (*error & PE_MASK) {
+            bwprintf(COM2, "Parity Error\r");
+            system_quit();
+            isError = 1;
+        }
+        if (*error & FE_MASK) {
+            bwprintf(COM2, "Framing Error\r");
+            system_quit();
+            isError = 1;
+        }
     
-    if (isError == 1) {
-//        bwgetc(COM2);
-        errorReset();
+        if (isError == 1) {
+            bwgetc(COM2);
+            errorReset();
+        }
     }
 }
 
@@ -82,11 +84,11 @@ int main( int argc, const char* argv[] ) {
     /* Run instructions (Polling Loop) */
     //int test = 0; //1500-1600 cycles through polling loop
     //time_t test = 0; //9000-10000 clock cycles through polling loop
-    //time_t test1 = 0;
-    //time_t test2 = 0; 5ms
+    //time_t test1 = 0; //62ms
+    //time_t test2 = 0; //5ms
     //time_t test3 = 0;
     //time_t test4 = 0;
-    //time_t test5 = 0; < 1ms
+    //time_t test5 = 0; //< 1ms
     while (system_status()) {
         /* Test */
         //test++;        
@@ -118,6 +120,9 @@ int main( int argc, const char* argv[] ) {
         if (io_canGet( COM1 ) > 0) {
             sensor_read = (char)io_getc( COM1 );
             if (sensor_check(sensor_read)) {
+                //test2 = timer_getMilli();
+                //if (test3 < test2 - test1) test3 = test2 - test1;
+                //io_printf(COM2, "\x1b[s\x1b[H%d\x1b[u", test3);
                 //io_printf(COM2, "\x1b[s\x1b[H%d\x1b[u", test);
                 //test = 0;
             }
@@ -129,7 +134,8 @@ int main( int argc, const char* argv[] ) {
  
         /* Write Check */
         if (io_canPut( COM1 ) > 0) {
-            io_putc_from_buf( COM1 );
+            data_read = io_putc_from_buf( COM1 );
+            //if (data_read == (char)133) test1 = timer_getMilli();
         }
         if (io_canPut( COM2 ) > 0) {
             io_putc_from_buf( COM2 );

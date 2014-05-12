@@ -106,28 +106,28 @@ int io_canPut( int channel ) {
     /* Should not get here */
     return -1;
 }
-int io_putc_from_buf( int channel ) {
+char io_putc_from_buf( int channel ) {
     int *data;
     char c;
 
     switch( channel ) {
         case COM1:
-            if (buffer_isEmpty(&COM1_buf)) return 0;
+            if (buffer_isEmpty(&COM1_buf)) return (char)0;
             data = (int *)( UART1_BASE + UART_DATA_OFFSET );
             c = buffer_get(&COM1_buf);
             break;
         case COM2:
-            if (buffer_isEmpty(&COM2_buf)) return 0;
+            if (buffer_isEmpty(&COM2_buf)) return (char)0;
             data = (int *)( UART2_BASE + UART_DATA_OFFSET );
             c = buffer_get(&COM2_buf);
             break;
         default:
-            return -1;
+            return (char)0xff;
             break;
     }
     
     *data = c;
-    return 0;
+    return c;
 }
 int io_putc( int channel, char c ) {
     switch( channel ) {
